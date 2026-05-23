@@ -16,10 +16,36 @@ jobs:
           cache: 'npm'
       - run: npm ci
       - name: Generate post
+        id: gen
         env:
           DATABASE_URL: ${{ secrets.DATABASE_URL }}
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
           UNSPLASH_ACCESS_KEY: ${{ secrets.UNSPLASH_ACCESS_KEY }}
           NEXT_PUBLIC_SITE_URL: ${{ secrets.NEXT_PUBLIC_SITE_URL }}
           NEXT_PUBLIC_SITE_NAME: ${{ secrets.NEXT_PUBLIC_SITE_NAME }}
-        run: npx tsx scripts/generate-post.ts
+        run: |
+          npx tsx scripts/generate-post.ts 2>&1 | tee generate-output.txt
+          echo "log<<EOF" >> $GITHUB_OUTPUT
+          tail -6 generate-output.txt >> $GITHUB_OUTPUT
+          echo "EOF" >> $GITHUB_OUTPUT
+
+      - name: Send email notification
+        if: always()
+        uses: dawidd6/action-send-mail@v3
+        with:
+          server_address: smtp.gmail.com
+          server_port: 587
+          username: ${{ secrets.GMAIL_USER }}
+          password: ${{ secrets.GMAIL_APP_PASSWORD }}
+          subject: "[AI전환연구소] 새 글이 발행되었습니다"
+          to: ${{ secrets.GMAIL_USER }}
+          from: AI전환연구소 <${{ secrets.GMAIL_USER }}>
+          body: |
+            AI전환연구소 블로그에 새 글이 자동 생성되었습니다.
+
+            --- 생성 로그 ---
+            ${{ steps.gen.outputs.log }}
+
+            ---
+            블로그: https://aitrans-lab.com
+            GitHub Actions: https://github.com/rommy0418-wq/auto-blog-template/actions
