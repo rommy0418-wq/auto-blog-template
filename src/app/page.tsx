@@ -1,6 +1,6 @@
 import { Suspense } from "react";
+import Link from "next/link";
 import pool from "@/lib/db";
-import { RowDataPacket } from "mysql2";
 import PostList from "@/components/PostList";
 import PostCard from "@/components/PostCard";
 import ViewToggle from "@/components/ViewToggle";
@@ -9,13 +9,13 @@ import Pagination from "@/components/Pagination";
 const LIMIT = 10;
 
 const categories: { key: string | null; label: string }[] = [
-  { key: null,       label: "전체" },
-  { key: "before",   label: "준비" },
-  { key: "bidding",  label: "실전" },
-  { key: "after",    label: "관리" },
-  { key: "tax",      label: "비용·세금" },
-  { key: "law",      label: "규정·법률" },
-  { key: "ai",       label: "AI활용" },
+  { key: null,           label: "전체" },
+  { key: "foundation",   label: "AI 입문" },
+  { key: "tools",        label: "도구 실전" },
+  { key: "marketing",    label: "AI 마케팅" },
+  { key: "transform",    label: "전환 전략" },
+  { key: "business",     label: "1인기업" },
+  { key: "cases",        label: "사례 분석" },
 ];
 
 type SearchParams = Promise<{
@@ -31,19 +31,24 @@ export default async function HomePage({ searchParams }: { searchParams: SearchP
   const currentPage = Math.max(1, Number(page) || 1);
   const offset = (currentPage - 1) * LIMIT;
 
-  const whereCategory = category ? " AND category = ?" : "";
-  const queryParams: (string | number)[] = category ? [category, LIMIT, offset] : [LIMIT, offset];
-  const countParams: string[] = category ? [category] : [];
+  const whereCategory = category ? " AND category = $1" : "";
+  const countParams = category ? [category] : [];
+  const queryParams: (string | number)[] = category
+    ? [category, LIMIT, offset]
+    : [LIMIT, offset];
+  const limitIdx = category ? 2 : 1;
+  const offsetIdx = category ? 3 : 2;
 
-  const [[{ total }]] = await pool.query<RowDataPacket[]>(
+  const countResult = await pool.query(
     `SELECT COUNT(*) as total FROM posts WHERE status = 'published'${whereCategory}`,
     countParams
   );
+  const total = Number(countResult.rows[0].total);
 
-  const [posts] = await pool.query<RowDataPacket[]>(
-    `SELECT id, title, slug, category, thumbnail_url, meta_description, content, published_at, view_count
+  const { rows: posts } = await pool.query(
+    `SELECT id, title, slug, category, level, thumbnail_url, meta_description, content, published_at, view_count
      FROM posts WHERE status = 'published'${whereCategory}
-     ORDER BY published_at DESC LIMIT ? OFFSET ?`,
+     ORDER BY published_at DESC LIMIT $${limitIdx} OFFSET $${offsetIdx}`,
     queryParams
   );
 
@@ -65,17 +70,21 @@ export default async function HomePage({ searchParams }: { searchParams: SearchP
                 color: "var(--accent)",
                 marginBottom: "0.5rem",
               }}>
-                전문 블로그
+                AI TRANSFORMATION
               </div>
-              <h1 style={{
-                fontFamily: "var(--font-serif)",
-                fontSize: "clamp(1.75rem, 4vw, 2.5rem)",
-                fontWeight: 800,
-                color: "var(--header-text)",
-                lineHeight: 1.2,
-                letterSpacing: "-0.01em",
-              }}>
-                {process.env.NEXT_PUBLIC_SITE_NAME || "내 블로그"}
+              <h1 style={{ margin: 0 }}>
+                <Link href="/" style={{
+                  fontFamily: "var(--font-serif)",
+                  fontSize: "clamp(1.75rem, 4vw, 2.5rem)",
+                  fontWeight: 800,
+                  color: "var(--header-text)",
+                  lineHeight: 1.2,
+                  letterSpacing: "-0.01em",
+                  textDecoration: "none",
+                  display: "block",
+                }}>
+                  {process.env.NEXT_PUBLIC_SITE_NAME || "내 블로그"}
+                </Link>
               </h1>
               <p style={{
                 fontSize: "0.8125rem",
@@ -83,16 +92,20 @@ export default async function HomePage({ searchParams }: { searchParams: SearchP
                 marginTop: "0.5rem",
                 letterSpacing: "0.02em",
               }}>
-                AI로 더 쉽게, 더 스마트하게
+                25년 웹 전문가의 기업 AI 전환 실전 가이드
               </p>
             </div>
-            <div style={{
-              flexShrink: 0,
-              width: "3px",
-              height: "4.5rem",
-              background: "var(--accent)",
-              borderRadius: "2px",
-            }} />
+            <div style={{ display: "flex", flexDirection: "column", alignItems: "flex-end", gap: "0.75rem" }}>
+              <div style={{ width: "3px", height: "4.5rem", background: "var(--accent)", borderRadius: "2px" }} />
+              <Link href="/contents" style={{
+                fontSize: "0.6875rem", fontWeight: 700, letterSpacing: "0.08em",
+                color: "var(--accent)", textDecoration: "none", textTransform: "uppercase",
+                border: "1px solid var(--accent)", borderRadius: "4px",
+                padding: "0.2rem 0.5rem", opacity: 0.85,
+              }}>
+                전체 목차
+              </Link>
+            </div>
           </div>
         </div>
       </header>

@@ -1,7 +1,6 @@
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import pool from "@/lib/db";
-import { RowDataPacket } from "mysql2";
 import { Post } from "@/types";
 import JsonLd from "@/components/JsonLd";
 import CommentSection from "@/components/CommentSection";
@@ -11,26 +10,52 @@ import Link from "next/link";
 
 export const revalidate = 3600;
 
+function buildToc(html: string): { tocItems: { id: string; text: string }[]; contentHtml: string } {
+  let idx = 0;
+  const tocItems: { id: string; text: string }[] = [];
+  const contentHtml = html.replace(
+    /<h2([^>]*)>([\s\S]*?)<\/h2>/gi,
+    (_, attrs: string, inner: string) => {
+      const id = `toc-${idx++}`;
+      const text = inner.replace(/<[^>]+>/g, "").trim();
+      tocItems.push({ id, text });
+      return `<h2${attrs} id="${id}">${inner}</h2>`;
+    }
+  );
+  return { tocItems, contentHtml };
+}
+
 type Props = { params: Promise<{ slug: string }> };
 
 async function getPost(slug: string): Promise<Post | null> {
-  const [rows] = await pool.query<RowDataPacket[]>(
-    "SELECT * FROM posts WHERE slug = ? AND status = 'published'",
+  const { rows } = await pool.query(
+    "SELECT * FROM posts WHERE slug = $1 AND status = 'published'",
     [slug]
   );
   return (rows[0] as Post) || null;
 }
 
+async function getRelatedPosts(postId: number, category: string) {
+  const { rows } = await pool.query(
+    `SELECT id, title, slug, category, level, thumbnail_url, published_at
+     FROM posts
+     WHERE status = 'published' AND id != $1 AND category = $2
+     ORDER BY published_at DESC LIMIT 4`,
+    [postId, category]
+  );
+  return rows;
+}
+
 async function getLikeCount(postId: number): Promise<number> {
-  const [[row]] = await pool.query<RowDataPacket[]>(
-    "SELECT COUNT(*) as count FROM likes WHERE post_id = ?",
+  const { rows } = await pool.query(
+    "SELECT COUNT(*) as count FROM likes WHERE post_id = $1",
     [postId]
   );
-  return row?.count || 0;
+  return Number(rows[0]?.count) || 0;
 }
 
 export async function generateStaticParams() {
-  const [rows] = await pool.query<RowDataPacket[]>(
+  const { rows } = await pool.query(
     "SELECT slug FROM posts WHERE status = 'published'"
   );
   return rows.map((row) => ({ slug: row.slug }));
@@ -64,20 +89,20 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 }
 
 const catLabels: Record<string, string> = {
-  before:  "입찰준비",
-  bidding: "입찰·낙찰",
-  after:   "명도·출구",
-  tax:     "세금·대출",
-  law:     "권리분석",
-  ai:      "AI활용",
+  foundation: "AI 입문",
+  tools:      "도구 실전",
+  marketing:  "AI 마케팅",
+  transform:  "전환 전략",
+  business:   "1인기업",
+  cases:      "사례 분석",
 };
 const catBadgeClass: Record<string, string> = {
-  before: "badge badge-before",
-  bidding: "badge badge-bidding",
-  after:   "badge badge-after",
-  tax:     "badge badge-tax",
-  law:     "badge badge-law",
-  ai:      "badge badge-ai",
+  foundation: "badge badge-before",
+  tools:      "badge badge-bidding",
+  marketing:  "badge badge-after",
+  transform:  "badge badge-tax",
+  business:   "badge badge-law",
+  cases:      "badge badge-ai",
 };
 
 export default async function PostPage({ params }: Props) {
@@ -85,8 +110,11 @@ export default async function PostPage({ params }: Props) {
   const post = await getPost(slug);
   if (!post) notFound();
 
-  await pool.query("UPDATE posts SET view_count = view_count + 1 WHERE id = ?", [post.id]);
-  const likeCount = await getLikeCount(post.id);
+  await pool.query("UPDATE posts SET view_count = view_count + 1 WHERE id = $1", [post.id]);
+  const [likeCount, relatedPosts] = await Promise.all([
+    getLikeCount(post.id),
+    getRelatedPosts(post.id, post.category),
+  ]);
 
   const publishedDate = post.published_at
     ? new Date(post.published_at).toLocaleDateString("ko-KR", {
@@ -94,13 +122,15 @@ export default async function PostPage({ params }: Props) {
       })
     : null;
 
-  const levelLabel = post.slug?.startsWith("basic-") ? "기초"
-    : post.slug?.startsWith("mid-") ? "중급"
-    : post.slug?.startsWith("adv-") ? "고급"
+  const levelLabel = post.level === "기초편" ? "기초"
+    : post.level === "중급편" ? "중급"
+    : post.level === "고급편" ? "고급"
     : null;
   const levelCls = levelLabel === "기초" ? "badge badge-basic"
     : levelLabel === "중급" ? "badge badge-mid"
     : "badge badge-adv";
+
+  const { tocItems, contentHtml } = buildToc(post.content);
 
   return (
     <>
@@ -125,7 +155,7 @@ export default async function PostPage({ params }: Props) {
               textDecoration: "none",
               letterSpacing: "-0.01em",
             }}>
-              내 블로그
+              {process.env.NEXT_PUBLIC_SITE_NAME || "AI전환연구소"}
             </Link>
             <Link href="/" style={{
               fontSize: "0.75rem",
@@ -211,10 +241,45 @@ export default async function PostPage({ params }: Props) {
               </div>
             )}
 
+            {/* 목차 */}
+            {tocItems.length >= 2 && (
+              <nav style={{
+                background: "rgba(0,0,0,0.18)",
+                border: "1px solid var(--border)",
+                borderRadius: "10px",
+                padding: "1rem 1.25rem",
+                marginBottom: "2rem",
+              }}>
+                <p style={{ fontSize: "0.75rem", fontWeight: 700, color: "var(--ink-muted)", margin: "0 0 0.6rem", letterSpacing: "0.05em", textTransform: "uppercase" }}>
+                  목차
+                </p>
+                <ol style={{ margin: 0, padding: 0, listStyle: "none", display: "flex", flexDirection: "column", gap: "0.35rem" }}>
+                  {tocItems.map((item, i) => (
+                    <li key={item.id}>
+                      <a
+                        href={`#${item.id}`}
+                        style={{
+                          display: "flex", alignItems: "baseline", gap: "0.5rem",
+                          fontSize: "0.8125rem", color: "var(--ink-muted)", textDecoration: "none",
+                          lineHeight: 1.5,
+                        }}
+                        className="toc-link"
+                      >
+                        <span style={{ fontSize: "0.6875rem", color: "var(--accent)", fontWeight: 700, minWidth: "1.25rem" }}>
+                          {i + 1}.
+                        </span>
+                        {item.text}
+                      </a>
+                    </li>
+                  ))}
+                </ol>
+              </nav>
+            )}
+
             {/* 본문 */}
             <div
               className="prose"
-              dangerouslySetInnerHTML={{ __html: post.content }}
+              dangerouslySetInnerHTML={{ __html: contentHtml }}
             />
 
             {/* 좋아요 & 공유 */}
@@ -228,6 +293,76 @@ export default async function PostPage({ params }: Props) {
               <ShareButton title={post.title} />
             </div>
           </article>
+
+          {/* ── 관련 글 추천 ──────────────────── */}
+          {relatedPosts.length > 0 && (
+            <section style={{
+              background: "var(--bg-card)",
+              borderRadius: "12px",
+              border: "1px solid var(--border)",
+              padding: "1.5rem",
+              marginBottom: "2rem",
+              boxShadow: "0 1px 4px rgba(0,0,0,0.04)",
+            }}>
+              <h3 style={{
+                fontSize: "0.875rem",
+                fontWeight: 700,
+                color: "var(--ink-muted)",
+                letterSpacing: "0.05em",
+                marginBottom: "1rem",
+              }}>
+                관련 글 추천
+              </h3>
+              <div style={{
+                display: "grid",
+                gridTemplateColumns: "repeat(auto-fill, minmax(220px, 1fr))",
+                gap: "1rem",
+              }}>
+                {relatedPosts.map((rp: { id: number; title: string; slug: string; category: string; level: string; thumbnail_url: string | null; published_at: string }) => (
+                  <Link
+                    key={rp.id}
+                    href={`/posts/${rp.slug}`}
+                    style={{
+                      display: "block",
+                      textDecoration: "none",
+                      borderRadius: "8px",
+                      border: "1px solid var(--border)",
+                      overflow: "hidden",
+                      transition: "box-shadow 0.2s",
+                    }}
+                    className="related-card"
+                  >
+                    {rp.thumbnail_url && (
+                      // eslint-disable-next-line @next/next/no-img-element
+                      <img
+                        src={rp.thumbnail_url}
+                        alt={rp.title}
+                        style={{ width: "100%", height: "120px", objectFit: "cover", display: "block" }}
+                      />
+                    )}
+                    <div style={{ padding: "0.75rem" }}>
+                      <span className={catBadgeClass[rp.category] || "badge"} style={{ fontSize: "0.625rem", marginBottom: "0.4rem", display: "inline-block" }}>
+                        {catLabels[rp.category] || rp.category}
+                      </span>
+                      <p style={{
+                        fontSize: "0.8125rem",
+                        fontWeight: 600,
+                        color: "var(--ink)",
+                        lineHeight: 1.4,
+                        margin: 0,
+                        display: "-webkit-box",
+                        WebkitLineClamp: 2,
+                        WebkitBoxOrient: "vertical",
+                        overflow: "hidden",
+                      }}>
+                        {rp.title}
+                      </p>
+                    </div>
+                  </Link>
+                ))}
+              </div>
+            </section>
+          )}
 
           {/* ── 댓글 ────────────────────────────── */}
           <CommentSection postId={post.id} />

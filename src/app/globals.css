@@ -458,6 +458,15 @@ body {
   white-space: nowrap;
 }
 
+/* ── TOC link hover ─────────────────────────────── */
+.toc-link:hover { color: var(--accent) !important; }
+
+/* ── Related post card hover ───────────────────── */
+.related-card:hover { box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
+
+/* ── Contents curriculum item hover ─────────────── */
+.contents-item:hover { background: rgba(255,255,255,0.04); }
+
 /* ── Ad slot in feed ────────────────────────────── */
 .feed-ad-slot {
   padding: 1.25rem 2.5rem;

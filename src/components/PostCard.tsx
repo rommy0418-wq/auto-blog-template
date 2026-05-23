@@ -9,38 +9,37 @@ interface PostCardProps {
 }
 
 const catLabels: Record<string, string> = {
-  before: "입찰준비",
-  bidding: "입찰·낙찰",
-  after:   "명도·출구",
-  tax:     "세금·대출",
-  law:     "권리분석",
-  ai:      "AI활용",
+  foundation: "AI 입문",
+  tools:      "도구 실전",
+  marketing:  "AI 마케팅",
+  transform:  "전환 전략",
+  business:   "1인기업",
+  cases:      "사례 분석",
 };
 
 const catBadgeClass: Record<string, string> = {
-  before: "badge badge-before",
-  bidding: "badge badge-bidding",
-  after:   "badge badge-after",
-  tax:     "badge badge-tax",
-  law:     "badge badge-law",
-  ai:      "badge badge-ai",
+  foundation: "badge badge-before",
+  tools:      "badge badge-bidding",
+  marketing:  "badge badge-after",
+  transform:  "badge badge-tax",
+  business:   "badge badge-law",
+  cases:      "badge badge-ai",
 };
 
-// Top border accent per category
 const catAccent: Record<string, string> = {
-  before: "var(--cat-before-c)",
-  bidding: "var(--cat-bidding-c)",
-  after:   "var(--cat-after-c)",
-  tax:     "var(--cat-tax-c)",
-  law:     "var(--cat-law-c)",
-  ai:      "var(--cat-ai-c)",
+  foundation: "var(--cat-before-c)",
+  tools:      "var(--cat-bidding-c)",
+  marketing:  "var(--cat-after-c)",
+  transform:  "var(--cat-tax-c)",
+  business:   "var(--cat-law-c)",
+  cases:      "var(--cat-ai-c)",
 };
 
-function getLevelBadge(slug?: string): { cls: string; label: string } | null {
-  if (!slug) return null;
-  if (slug.startsWith("basic-")) return { cls: "badge badge-basic", label: "기초" };
-  if (slug.startsWith("mid-"))   return { cls: "badge badge-mid",   label: "중급" };
-  if (slug.startsWith("adv-"))   return { cls: "badge badge-adv",   label: "고급" };
+function getLevelBadge(level?: string | null): { cls: string; label: string } | null {
+  if (!level) return null;
+  if (level === "기초편") return { cls: "badge badge-basic", label: "기초" };
+  if (level === "중급편") return { cls: "badge badge-mid",   label: "중급" };
+  if (level === "고급편") return { cls: "badge badge-adv",   label: "고급" };
   return null;
 }
 
@@ -77,8 +76,8 @@ export default function PostCard({ posts }: PostCardProps) {
         <div key={chunkIndex}>
           <div style={gridStyle}>
             {chunk.map((post) => {
-              const cat = post.category || "before";
-              const level = getLevelBadge(post.slug);
+              const cat = post.category || "foundation";
+              const level = getLevelBadge(post.level);
               const accent = catAccent[cat] || "var(--accent)";
               const publishedDate = post.published_at
                 ? new Date(post.published_at).toLocaleDateString("ko-KR")

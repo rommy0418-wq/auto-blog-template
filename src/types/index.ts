@@ -12,6 +12,7 @@ export interface Post {
   created_at: string;
   updated_at: string;
   view_count: number;
+  level: string | null;
 }
 
 export interface Comment {

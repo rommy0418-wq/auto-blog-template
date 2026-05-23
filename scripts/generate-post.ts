@@ -5,7 +5,7 @@
  */
 
 import { GoogleGenerativeAI } from "@google/generative-ai";
-import mysql from "mysql2/promise";
+import { Pool } from "pg";
 import { allTopics, Topic } from "./topics";
 import * as dotenv from "dotenv";
 import * as path from "path";
@@ -15,14 +15,9 @@ import * as fs from "fs";
 dotenv.config({ path: path.resolve(process.cwd(), ".env.local") });
 
 // ── DB 연결 ──────────────────────────────────────
-const pool = mysql.createPool({
-  host: process.env.DATABASE_HOST || "127.0.0.1",
-  port: Number(process.env.DATABASE_PORT) || 3306,
-  user: process.env.DATABASE_USER || "root",
-  password: process.env.DATABASE_PASSWORD || "",
-  database: process.env.DATABASE_NAME || "my_blog",
-  socketPath: process.env.DATABASE_SOCKET || undefined,
-  charset: "utf8mb4",
+const pool = new Pool({
+  connectionString: process.env.DATABASE_URL,
+  ssl: { rejectUnauthorized: false },
 });
 
 // ── Gemini 클라이언트 ─────────────────────────────
@@ -35,13 +30,40 @@ const genAI = new GoogleGenerativeAI(apiKey);
 const model = genAI.getGenerativeModel({ model: "gemini-2.5-flash" });
 
 // ── 카테고리 → Unsplash 검색어 맵 ────────────────
-const CATEGORY_QUERY: Record<string, string> = {
-  bidding: "real estate auction people meeting",
-  law:     "lawyer people office consultation",
-  before:  "house inspection people property",
-  after:   "house keys family moving people",
-  tax:     "finance advisor meeting people",
-  ai:      "technology people computer office",
+// 카테고리별 Unsplash 검색어 (배열 순서대로 시도 — 앞 쿼리 소진 시 다음으로)
+const CATEGORY_QUERIES: Record<string, string[]> = {
+  foundation: [
+    "artificial intelligence business technology people",
+    "technology innovation digital future",
+    "startup entrepreneur modern office",
+  ],
+  tools: [
+    "technology computer software people working",
+    "developer coding laptop workspace",
+    "digital tools productivity desk",
+  ],
+  marketing: [
+    "digital marketing business strategy people",
+    "social media content creator laptop",
+    "advertising creative agency team",
+  ],
+  transform: [
+    "business transformation team meeting office",
+    "business strategy planning whiteboard",
+    "leadership innovation professional workspace",
+    "team collaboration technology modern",
+    "digital innovation startup future",
+  ],
+  business: [
+    "entrepreneur freelancer laptop working cafe",
+    "small business owner professional",
+    "independent worker creative studio",
+  ],
+  cases: [
+    "business success team collaboration office",
+    "case study presentation boardroom",
+    "corporate achievement growth chart",
+  ],
 };
 
 interface UnsplashResult {
@@ -51,7 +73,7 @@ interface UnsplashResult {
 
 // ── DB에서 이미 사용된 이미지 URL 조회 (썸네일 + 본문 인라인 모두) ──
 async function getUsedImageIds(): Promise<Set<string>> {
-  const [rows] = await pool.query<mysql.RowDataPacket[]>(
+  const { rows } = await pool.query(
     "SELECT thumbnail_url, content FROM posts WHERE status = 'published'"
   );
   const ids = new Set<string>();
@@ -72,7 +94,7 @@ async function getUsedImageIds(): Promise<Set<string>> {
   return ids;
 }
 
-// ── Unsplash 이미지 여러 장 가져오기 (중복 제외) ─
+// ── Unsplash 이미지 여러 장 가져오기 (중복 제외, 쿼리 소진 시 다음 쿼리로 fallback) ─
 async function fetchUnsplashImages(category: string, count: number, usedIds: Set<string> = new Set()): Promise<UnsplashResult[]> {
   const unsplashKey = process.env.UNSPLASH_ACCESS_KEY;
   if (!unsplashKey) {
@@ -80,11 +102,14 @@ async function fetchUnsplashImages(category: string, count: number, usedIds: Set
     return [];
   }
 
-  const query = CATEGORY_QUERY[category] ?? "real estate people property";
+  const queries = CATEGORY_QUERIES[category] ?? ["business technology people office"];
+  const results: UnsplashResult[] = [];
 
-  try {
-    const results: UnsplashResult[] = [];
-    let page = 1;
+  for (const query of queries) {
+    if (results.length >= count) break;
+
+    try {
+      let page = 1;
 
     // 충분한 미사용 이미지가 모일 때까지 페이지 순회 (최대 3페이지)
     while (results.length < count && page <= 3) {
@@ -99,7 +124,7 @@ async function fetchUnsplashImages(category: string, count: number, usedIds: Set
       });
 
       if (!res.ok) {
-        writeLog(`⚠️  Unsplash API 오류 (${res.status}) — 이미지 없이 진행`);
+        writeLog(`⚠️  Unsplash API 오류 (${res.status}) — 다음 쿼리 시도`);
         break;
       }
 
@@ -116,8 +141,8 @@ async function fetchUnsplashImages(category: string, count: number, usedIds: Set
 
       for (const photo of data.results) {
         const baseUrl = photo.urls.regular.split("?")[0];
-        if (usedIds.has(baseUrl)) continue; // 이미 사용된 이미지 제외
-        usedIds.add(baseUrl); // 이번 요청 내 중복도 방지
+        if (usedIds.has(baseUrl)) continue;
+        usedIds.add(baseUrl);
         results.push({
           url: photo.urls.regular,
           attribution: `<a href="${photo.links.html}?utm_source=my_blog&utm_medium=referral" rel="noopener noreferrer" style="color:rgba(255,255,255,0.9);">${photo.user.name}</a> / Unsplash`,
@@ -127,13 +152,13 @@ async function fetchUnsplashImages(category: string, count: number, usedIds: Set
 
       page++;
     }
-
-    if (!results.length) writeLog("⚠️  Unsplash 미사용 이미지 없음 — 이미지 없이 진행");
-    return results;
-  } catch (err) {
-    writeLog(`⚠️  Unsplash fetch 실패: ${err instanceof Error ? err.message : String(err)} — 이미지 없이 진행`);
-    return [];
+    } catch (err) {
+      writeLog(`⚠️  Unsplash fetch 실패 (${query}): ${err instanceof Error ? err.message : String(err)}`);
+    }
   }
+
+  if (!results.length) writeLog("⚠️  Unsplash 미사용 이미지 없음 — 이미지 없이 진행");
+  return results;
 }
 
 // ── 콘텐츠 내 이미지 삽입 ────────────────────────
@@ -170,19 +195,39 @@ function injectImagesIntoContent(html: string, images: UnsplashResult[]): string
   return parts.join(DELIMITER);
 }
 
-// ── 다음 발행할 주제 결정 ─────────────────────────
+// ── 다음 발행할 주제 결정 (카테고리 균형 선택) ───────
 async function getNextTopic(): Promise<Topic | null> {
-  const [rows] = await pool.query<mysql.RowDataPacket[]>(
-    "SELECT slug FROM posts WHERE slug REGEXP '^(basic|mid|adv)-[0-9]+$'"
-  );
-  const existingSlugs = new Set(rows.map((r) => r.slug));
+  const { rows } = await pool.query("SELECT slug FROM posts");
+  const existingSlugs = new Set(rows.map((r) => r.slug as string));
+
+  const categories = ["foundation", "tools", "marketing", "transform", "business", "cases"] as const;
+
+  // 카테고리별 남은 주제·발행 수 집계
+  const remaining: Record<string, Topic[]> = {};
+  const count: Record<string, number> = {};
+  for (const cat of categories) { remaining[cat] = []; count[cat] = 0; }
 
   for (const topic of allTopics) {
-    if (!existingSlugs.has(topic.slug)) {
-      return topic;
+    if (existingSlugs.has(topic.slug)) {
+      count[topic.category]++;
+    } else {
+      remaining[topic.category].push(topic);
     }
   }
-  return null; // 모든 주제 완료
+
+  if (categories.every((c) => !remaining[c].length)) return null;
+
+  // 발행 수가 가장 적고 남은 주제가 있는 카테고리 선택 (동점 시 선언 순서 우선)
+  let pick = "";
+  let min = Infinity;
+  for (const cat of categories) {
+    if (remaining[cat].length > 0 && count[cat] < min) {
+      min = count[cat];
+      pick = cat;
+    }
+  }
+
+  return remaining[pick][0];
 }
 
 // ── Gemini 프롬프트 생성 ──────────────────────────
@@ -215,7 +260,7 @@ function buildPrompt(topic: Topic): string {
 <h2>💡 AI 도구 활용 팁</h2>
 <p>...</p>
 <ul><li>...</li></ul>
-<blockquote>프롬프트 예시: "..."</blockquote>\`;
+<blockquote>프롬프트 예시: "..."</blockquote>`;
 }
 
 // ── HTML 정리: 마크다운 잔재 + 아이콘 태그 제거 ──
@@ -233,25 +278,23 @@ function cleanHtml(raw: string): string {
 
 // ── DB에 글 저장 ──────────────────────────────────
 async function savePost(topic: Topic, content: string, thumbnailUrl: string | null): Promise<number> {
-  const now = new Date();
-  const publishedAt = now.toISOString().slice(0, 19).replace("T", " ");
-
-  const [result] = await pool.query<mysql.ResultSetHeader>(
+  const result = await pool.query(
     `INSERT INTO posts
-      (title, content, slug, category, thumbnail_url, meta_description, keywords, status, published_at)
-     VALUES (?, ?, ?, ?, ?, ?, ?, 'published', ?)`,
+      (title, content, slug, category, level, thumbnail_url, meta_description, keywords, status, published_at)
+     VALUES ($1, $2, $3, $4, $5, $6, $7, $8, 'published', NOW())
+     RETURNING id`,
     [
       topic.title,
       content,
       topic.slug,
       topic.category,
+      topic.level,
       thumbnailUrl,
       topic.meta_description,
       topic.keywords,
-      publishedAt,
     ]
   );
-  return result.insertId;
+  return result.rows[0].id;
 }
 
 // ── 로그 파일 기록 ────────────────────────────────
