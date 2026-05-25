@@ -8,7 +8,7 @@
   --ink:          #1c1c1a;
   --ink-mid:      #4a4a46;
   --ink-muted:    #7a7a74;
-  --ink-faint:    #b0ac9e;
+  --ink-faint:    #918d7f;
   --border:       #e5e0d4;
   --border-light: #f0ece2;
 
@@ -42,7 +42,7 @@
     --ink:          #e8e6e0;
     --ink-mid:      #b8b6ae;
     --ink-muted:    #8a887e;
-    --ink-faint:    #5a5850;
+    --ink-faint:    #7a7870;
     --border:       #2e2e2a;
     --border-light: #242420;
 
@@ -268,7 +268,7 @@ body {
 
 /* ── Prose (blog content) ───────────────────────── */
 .prose {
-  line-height: 1.9;
+  line-height: 1.7;
   font-size: 1.125rem;
   color: var(--ink-mid);
 }

@@ -119,7 +119,7 @@ export default function SearchBar() {
             outline: "none",
             color: "var(--header-text)",
             fontSize: "0.8125rem",
-            width: "180px",
+            width: "clamp(120px, 40vw, 220px)",
           }}
         />
         <button

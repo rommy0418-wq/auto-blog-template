@@ -56,10 +56,6 @@ export default function PostList({ posts }: PostListProps) {
             })
           : "";
 
-        const readingMinutes = post.content
-          ? Math.max(1, Math.round(post.content.replace(/<[^>]+>/g, "").length / 800))
-          : null;
-
         return (
           <div key={post.id}>
           <article className="feed-article">
@@ -78,14 +74,6 @@ export default function PostList({ posts }: PostListProps) {
                   {publishedDate}
                 </span>
               )}
-              {readingMinutes && (
-                <span style={{ fontSize: "0.75rem", color: "var(--ink-faint)" }}>
-                  · {readingMinutes}분 읽기
-                </span>
-              )}
-              <span style={{ fontSize: "0.75rem", color: "var(--ink-faint)" }}>
-                · 조회 {(post.view_count || 0).toLocaleString()}
-              </span>
             </div>
 
             {/* 제목 */}
@@ -96,7 +84,7 @@ export default function PostList({ posts }: PostListProps) {
             {/* 썸네일 */}
             {post.thumbnail_url && (
               <div style={{
-                position: "relative", width: "100%", height: "18rem",
+                position: "relative", width: "100%", height: "clamp(12rem, 40vw, 18rem)",
                 margin: "1.25rem 0", borderRadius: "10px", overflow: "hidden",
                 border: "1px solid var(--border)",
               }}>
