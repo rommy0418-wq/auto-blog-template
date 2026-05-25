@@ -159,14 +159,22 @@ export default async function PostPage({ params }: Props) {
             }}>
               {process.env.NEXT_PUBLIC_SITE_NAME || "AI전환연구소"}
             </Link>
-            <Link href="/" style={{
-              fontSize: "0.75rem",
-              color: "var(--header-muted)",
-              textDecoration: "none",
-              display: "flex", alignItems: "center", gap: "0.3rem",
-            }}>
-              ← 목록으로
-            </Link>
+            <nav style={{ display: "flex", alignItems: "center", gap: "var(--space-md)" }}>
+              <Link href="/about" style={{ fontSize: "0.75rem", color: "var(--header-muted)", textDecoration: "none" }}>
+                소개
+              </Link>
+              <Link href="/contact" style={{ fontSize: "0.75rem", color: "var(--header-muted)", textDecoration: "none" }}>
+                문의
+              </Link>
+              <Link href="/" style={{
+                fontSize: "0.75rem",
+                color: "var(--header-muted)",
+                textDecoration: "none",
+                display: "flex", alignItems: "center", gap: "0.3rem",
+              }}>
+                ← 목록
+              </Link>
+            </nav>
           </div>
         </header>
 

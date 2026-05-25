@@ -96,8 +96,12 @@ export default async function HomePage({ searchParams }: { searchParams: SearchP
                 25년 웹 전문가의 기업 AI 전환 실전 가이드
               </p>
             </div>
-            <div style={{ display: "flex", flexDirection: "column", alignItems: "flex-end", gap: "0.75rem" }}>
-              <SearchBar />
+            <div style={{ display: "flex", flexDirection: "column", alignItems: "flex-end", gap: "var(--space-sm)" }}>
+              <nav style={{ display: "flex", alignItems: "center", gap: "var(--space-md)" }}>
+                <Link href="/about" style={{ fontSize: "0.75rem", color: "var(--header-muted)", textDecoration: "none" }}>소개</Link>
+                <Link href="/contact" style={{ fontSize: "0.75rem", color: "var(--header-muted)", textDecoration: "none" }}>문의</Link>
+                <SearchBar />
+              </nav>
               <Link href="/contents" className="btn btn-sm btn-outline" style={{ letterSpacing: "0.08em", textTransform: "uppercase" as const }}>
                 전체 목차
               </Link>

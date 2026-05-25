@@ -42,6 +42,7 @@ export default function Footer() {
           {[
             { href: "/about", label: "블로그 소개" },
             { href: "/contact", label: "문의하기" },
+            { href: "/terms", label: "이용약관" },
             { href: "/privacy", label: "개인정보처리방침" },
           ].map(({ href, label }, i) => (
             <span key={href} style={{ display: "inline-flex", alignItems: "center" }}>
