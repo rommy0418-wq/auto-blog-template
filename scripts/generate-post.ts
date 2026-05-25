@@ -230,11 +230,81 @@ async function getNextTopic(): Promise<Topic | null> {
   return remaining[pick][0];
 }
 
+// ── 카테고리별 전문 프롬프트 지침 ────────────────────
+const CATEGORY_INSTRUCTIONS: Record<string, string> = {
+  foundation: `[카테고리 지침: AI 입문]
+- 전문 용어를 쓸 때마다 괄호 안에 쉬운 설명을 덧붙일 것
+- 실생활 비유를 최소 2개 이상 사용하여 개념을 설명
+- "이것만 기억하세요" 핵심 요약 박스를 중간에 blockquote로 삽입`,
+
+  tools: `[카테고리 지침: 도구 실전]
+- 실제 도구 이름과 구체적 사용 단계(Step 1, 2, 3...)를 포함
+- 무료/유료 요금제를 표로 비교
+- "바로 따라하기" 실습 예시를 반드시 1개 이상 포함`,
+
+  marketing: `[카테고리 지침: AI 마케팅]
+- 구체적인 마케팅 수치(전환율, ROI, CTR 등)를 예시로 제시
+- Before/After 비교를 표로 보여줄 것
+- 실제 적용 가능한 프롬프트 템플릿을 blockquote로 2개 이상 포함`,
+
+  transform: `[카테고리 지침: 전환 전략]
+- 단계별 로드맵(3개월/6개월/12개월)을 표로 제시
+- 실패 사례와 성공 사례를 대비시켜 설명
+- 의사결정자가 경영진에게 보고할 수 있는 수준의 데이터 포함`,
+
+  business: `[카테고리 지침: 1인기업]
+- 혼자서도 바로 적용 가능한 실용적 방법에 집중
+- 월 비용 절감/시간 절약 효과를 구체적 숫자로 제시
+- "이번 주 해볼 일" 액션 아이템을 리스트로 마무리`,
+
+  cases: `[카테고리 지침: 사례 분석]
+- 실제 기업명 또는 업종을 구체적으로 언급 (예: "국내 중견 물류기업 A사")
+- 도입 전/후 성과를 수치로 비교하는 표 필수
+- 해당 사례에서 배울 수 있는 교훈 3가지를 정리`,
+};
+
+// ── 글 구조 템플릿 (랜덤 선택) ──────────────────────
+const STRUCTURE_TEMPLATES = [
+  {
+    name: "standard",
+    instruction: `[글 구조]
+- 후킹 도입부 → 핵심 개념 설명(h2) → 세부 내용(h3) → 실전 적용법(h2) → 💡 AI 도구 활용 팁(h2) → 마무리
+- 표와 목록을 적극 활용`,
+  },
+  {
+    name: "comparison",
+    instruction: `[글 구조: 비교분석형]
+- 후킹 도입부 → "한눈에 비교" 요약 표(h2) → 항목별 상세 비교(h2/h3) → 상황별 추천(h2) → 💡 AI 도구 활용 팁(h2) → 결론
+- 비교표를 최소 2개 포함`,
+  },
+  {
+    name: "checklist",
+    instruction: `[글 구조: 체크리스트형]
+- 후킹 도입부 → 체크리스트 전체 미리보기(ol) → 각 항목 상세 설명(h2마다 1개) → 💡 AI 도구 활용 팁(h2) → "오늘의 액션플랜" 마무리
+- 각 h2 제목에 번호를 붙여 진행감을 줄 것`,
+  },
+  {
+    name: "story",
+    instruction: `[글 구조: 사례 스토리형]
+- 후킹 도입부(문제 상황 묘사) → 배경 설명(h2) → 해결 과정 스토리(h2) → 결과와 교훈(h2, 성과 표 포함) → 💡 AI 도구 활용 팁(h2) → 마무리
+- "~했습니다", "~였습니다" 서술형으로 이야기를 풀어갈 것`,
+  },
+  {
+    name: "qna",
+    instruction: `[글 구조: Q&A형]
+- 후킹 도입부 → 자주 묻는 질문 5~7개를 h2로 배치(질문 형태 제목) → 각 질문에 명확한 답변 → 💡 AI 도구 활용 팁(h2) → 핵심 정리 마무리
+- 질문은 실무자가 실제로 궁금해할 내용으로 구성`,
+  },
+];
+
 // ── Gemini 프롬프트 생성 ──────────────────────────
 function buildPrompt(topic: Topic): string {
   const siteName = process.env.NEXT_PUBLIC_SITE_NAME || "내 블로그";
-  // Note: /auto-blog-setup 스킬이 이 함수를 니치에 맞게 자동 교체합니다
+  const catInstruction = CATEGORY_INSTRUCTIONS[topic.category] || "";
+  const structure = STRUCTURE_TEMPLATES[Math.floor(Math.random() * STRUCTURE_TEMPLATES.length)];
+
   return `당신은 "${siteName}" 블로그의 전문 작가입니다.
+25년 경력의 웹·IT 전문가 시점에서, 기업의 AI 전환을 돕는 실용적인 글을 작성합니다.
 
 아래 주제로 블로그 글을 작성해주세요.
 
@@ -246,10 +316,16 @@ function buildPrompt(topic: Topic): string {
 1. 누구나 이해할 수 있는 쉽고 친근한 말투로 작성
 2. 반드시 존댓말만 사용. 반말 절대 금지
 3. "여러분", "독자님" 등 호칭 사용 금지
-4. 첫 문장은 강한 후킹으로 시작 (인사말 금지)
-5. 3000자 내외, 표와 목록을 최대한 활용
+4. 첫 문장은 강한 후킹으로 시작 (인사말 금지). 충격적 통계, 의외의 사실, 공감되는 문제 제시 중 택 1
+5. 3500자 내외, 표와 목록을 최대한 활용
 6. 숫자로 설명 가능한 내용은 반드시 표로 제시
 7. 글 마지막에 "💡 AI 도구 활용 팁" 섹션 포함
+8. 구체적인 수치, 도구명, 기업명을 넣어 신뢰도를 높일 것
+9. 각 섹션 끝에 핵심을 한 줄로 요약하는 <strong> 태그 사용
+
+${catInstruction}
+
+${structure.instruction}
 
 [출력 형식]
 - 순수 HTML만 출력 (마크다운 기호 절대 사용 금지)
@@ -260,12 +336,15 @@ function buildPrompt(topic: Topic): string {
 <h2>💡 AI 도구 활용 팁</h2>
 <p>...</p>
 <ul><li>...</li></ul>
-<blockquote>프롬프트 예시: "..."</blockquote>`;
+<blockquote>프롬프트 예시: "..."</blockquote>
+
+[마지막에 반드시 추가]
+글 전체 내용을 150자 이내로 요약한 문장을 <!-- meta: 요약 내용 --> 형태로 HTML 맨 마지막에 삽입해주세요. 검색엔진 노출용 설명문입니다.`;
 }
 
 // ── HTML 정리: 마크다운 잔재 + 아이콘 태그 제거 ──
-function cleanHtml(raw: string): string {
-  return raw
+function cleanHtml(raw: string): { html: string; metaDesc: string | null } {
+  let cleaned = raw
     .replace(/```html\s*/gi, "")
     .replace(/```\s*/g, "")
     .replace(/\*\*(.+?)\*\*/g, "<strong>$1</strong>")
@@ -274,10 +353,21 @@ function cleanHtml(raw: string): string {
     .replace(/<span\b[^>]*class="[^"]*(?:material-icons|material-symbols)[^"]*"[^>]*>.*?<\/span>/gi, "")
     .replace(/<i\b[^>]*>([a-z_]{3,30})<\/i>/gi, "")
     .trim();
+
+  // AI가 생성한 meta description 추출
+  let metaDesc: string | null = null;
+  const metaMatch = cleaned.match(/<!--\s*meta:\s*(.+?)\s*-->/);
+  if (metaMatch) {
+    metaDesc = metaMatch[1].trim().slice(0, 160);
+    cleaned = cleaned.replace(/<!--\s*meta:\s*.+?\s*-->/g, "").trim();
+  }
+
+  return { html: cleaned, metaDesc };
 }
 
 // ── DB에 글 저장 ──────────────────────────────────
-async function savePost(topic: Topic, content: string, thumbnailUrl: string | null): Promise<number> {
+async function savePost(topic: Topic, content: string, thumbnailUrl: string | null, metaDesc: string | null): Promise<number> {
+  const finalMeta = metaDesc || topic.meta_description;
   const result = await pool.query(
     `INSERT INTO posts
       (title, content, slug, category, level, thumbnail_url, meta_description, keywords, status, published_at)
@@ -290,7 +380,7 @@ async function savePost(topic: Topic, content: string, thumbnailUrl: string | nu
       topic.category,
       topic.level,
       thumbnailUrl,
-      topic.meta_description,
+      finalMeta,
       topic.keywords,
     ]
   );
@@ -326,8 +416,9 @@ async function main() {
     const prompt = buildPrompt(topic);
     const result = await model.generateContent(prompt);
     const rawContent = result.response.text();
-    const content = cleanHtml(rawContent);
+    const { html: content, metaDesc } = cleanHtml(rawContent);
     writeLog(`✍️  생성 완료 (${content.length}자)`);
+    if (metaDesc) writeLog(`📋 AI 메타설명: ${metaDesc}`);
 
     // Unsplash 이미지 가져오기 (중복 제외, 썸네일 1장 + 인라인 2장)
     writeLog("🖼️  Unsplash 이미지 가져오는 중...");
@@ -339,7 +430,7 @@ async function main() {
     if (thumbnail) writeLog(`🖼️  썸네일: ${thumbnail.url}`);
 
     // DB 저장
-    const postId = await savePost(topic, contentWithImages, thumbnail?.url ?? null);
+    const postId = await savePost(topic, contentWithImages, thumbnail?.url ?? null, metaDesc);
     writeLog(`💾 DB 저장 완료 (id: ${postId}, slug: ${topic.slug})`);
     writeLog(`🌐 URL: ${process.env.NEXT_PUBLIC_SITE_URL}/posts/${topic.slug}`);
     writeLog("=== 완료 ===\n");
