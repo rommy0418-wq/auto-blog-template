@@ -34,6 +34,39 @@
   --lv-adv-c:   #b91c1c; --lv-adv-bg:   #fee2e2;
 }
 
+/* ── Dark Mode ─────────────────────────────────── */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg:           #121210;
+    --bg-card:      #1c1c1a;
+    --ink:          #e8e6e0;
+    --ink-mid:      #b8b6ae;
+    --ink-muted:    #8a887e;
+    --ink-faint:    #5a5850;
+    --border:       #2e2e2a;
+    --border-light: #242420;
+
+    --accent:       #f05a50;
+    --accent-hover: #e84840;
+    --accent-faint: #2a1614;
+
+    --header-bg:    #0a0a08;
+    --header-text:  #f5f3ee;
+    --header-muted: #6a6860;
+
+    --cat-before-c:  #38bdf8; --cat-before-bg:  #0c2d48;
+    --cat-bidding-c: #fb923c; --cat-bidding-bg: #3b1a06;
+    --cat-after-c:   #2dd4bf; --cat-after-bg:   #0a2e2a;
+    --cat-tax-c:     #4ade80; --cat-tax-bg:     #0a2e14;
+    --cat-law-c:     #a78bfa; --cat-law-bg:     #1e1248;
+    --cat-ai-c:      #60a5fa; --cat-ai-bg:      #0c1e3e;
+
+    --lv-basic-c: #34d399; --lv-basic-bg: #052e1c;
+    --lv-mid-c:   #fbbf24; --lv-mid-bg:   #2e1e04;
+    --lv-adv-c:   #f87171; --lv-adv-bg:   #2e0a0a;
+  }
+}
+
 /* ── Theme fonts ────────────────────────────────── */
 @theme inline {
   --font-sans:  var(--font-noto-sans-kr), "Apple SD Gothic Neo", system-ui, sans-serif;
@@ -111,7 +144,7 @@ body {
   transition: background 0.2s;
 }
 .feed-article:hover::before { background: var(--accent); }
-.feed-article:hover { background: #fdfcf9; }
+.feed-article:hover { background: var(--border-light); }
 
 .feed-title {
   font-family: var(--font-serif);
@@ -236,7 +269,7 @@ body {
 /* ── Prose (blog content) ───────────────────────── */
 .prose {
   line-height: 1.9;
-  font-size: 1rem;
+  font-size: 1.125rem;
   color: var(--ink-mid);
 }
 
@@ -345,7 +378,7 @@ body {
   color: var(--ink-mid);
 }
 .prose table tr:last-child td { border-bottom: none; }
-.prose table tr:nth-child(even) td { background: #faf8f4; }
+.prose table tr:nth-child(even) td { background: var(--bg); }
 
 /* ── Feed more link ─────────────────────────────── */
 .feed-more-link {

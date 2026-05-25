@@ -131,6 +131,8 @@ export default async function PostPage({ params }: Props) {
     : "badge badge-adv";
 
   const { tocItems, contentHtml } = buildToc(post.content);
+  const plainText = post.content.replace(/<[^>]+>/g, "");
+  const readingMinutes = Math.max(1, Math.round(plainText.length / 800));
 
   return (
     <>
@@ -198,6 +200,9 @@ export default async function PostPage({ params }: Props) {
                 </span>
               )}
               <span style={{ fontSize: "0.75rem", color: "var(--ink-faint)" }}>
+                · {readingMinutes}분 읽기
+              </span>
+              <span style={{ fontSize: "0.75rem", color: "var(--ink-faint)" }}>
                 · 조회 {post.view_count.toLocaleString()}
               </span>
             </div>
@@ -244,7 +249,7 @@ export default async function PostPage({ params }: Props) {
             {/* 목차 */}
             {tocItems.length >= 2 && (
               <nav style={{
-                background: "rgba(0,0,0,0.18)",
+                background: "var(--border-light)",
                 border: "1px solid var(--border)",
                 borderRadius: "10px",
                 padding: "1rem 1.25rem",

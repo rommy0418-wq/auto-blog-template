@@ -162,13 +162,12 @@ async function fetchUnsplashImages(category: string, count: number, usedIds: Set
 }
 
 // ── 콘텐츠 내 이미지 삽입 ────────────────────────
-function injectImagesIntoContent(html: string, images: UnsplashResult[]): string {
+function injectImagesIntoContent(html: string, images: UnsplashResult[], topicTitle: string): string {
   if (!images.length) return html;
 
   const DELIMITER = "</h2>";
   const parts = html.split(DELIMITER);
 
-  // 1번째 h2 뒤(index 1), 3번째 h2 뒤(index 3)에 삽입
   const targets: Array<[partIndex: number, imageIndex: number]> = [
     [1, 0],
     [3, 1],
@@ -178,9 +177,10 @@ function injectImagesIntoContent(html: string, images: UnsplashResult[]): string
     if (partIdx >= parts.length || !images[imgIdx]) continue;
 
     const img = images[imgIdx];
+    const altText = `${topicTitle} 관련 이미지 ${imgIdx + 1}`;
     const figure = [
       `<figure style="margin:1.75em 0;position:relative;display:block;">`,
-      `<img src="${img.url}" alt="관련 이미지" loading="lazy"`,
+      `<img src="${img.url}" alt="${altText}" loading="lazy"`,
       ` style="width:100%;max-height:400px;object-fit:cover;border-radius:10px;border:1px solid var(--border);display:block;" />`,
       `<figcaption style="position:absolute;bottom:8px;right:10px;font-size:0.65rem;`,
       `color:rgba(255,255,255,0.85);background:rgba(0,0,0,0.45);`,
@@ -335,7 +335,7 @@ async function main() {
     const allImages = await fetchUnsplashImages(topic.category, 3, usedIds);
     const thumbnail = allImages[0] ?? null;
     const inlineImages = allImages.slice(1, 3);
-    const contentWithImages = injectImagesIntoContent(content, inlineImages);
+    const contentWithImages = injectImagesIntoContent(content, inlineImages, topic.title);
     if (thumbnail) writeLog(`🖼️  썸네일: ${thumbnail.url}`);
 
     // DB 저장

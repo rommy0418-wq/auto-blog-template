@@ -56,6 +56,10 @@ export default function PostList({ posts }: PostListProps) {
             })
           : "";
 
+        const readingMinutes = post.content
+          ? Math.max(1, Math.round(post.content.replace(/<[^>]+>/g, "").length / 800))
+          : null;
+
         return (
           <div key={post.id}>
           <article className="feed-article">
@@ -72,6 +76,11 @@ export default function PostList({ posts }: PostListProps) {
               {publishedDate && (
                 <span style={{ fontSize: "0.75rem", color: "var(--ink-faint)", marginLeft: "0.25rem" }}>
                   {publishedDate}
+                </span>
+              )}
+              {readingMinutes && (
+                <span style={{ fontSize: "0.75rem", color: "var(--ink-faint)" }}>
+                  · {readingMinutes}분 읽기
                 </span>
               )}
               <span style={{ fontSize: "0.75rem", color: "var(--ink-faint)" }}>
