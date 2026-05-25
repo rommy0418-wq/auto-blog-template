@@ -491,6 +491,9 @@ body {
   white-space: nowrap;
 }
 
+/* ── Search result hover ───────────────────────── */
+.search-result-item:hover { background: var(--border-light); }
+
 /* ── TOC link hover ─────────────────────────────── */
 .toc-link:hover { color: var(--accent) !important; }
 

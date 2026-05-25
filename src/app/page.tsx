@@ -5,6 +5,7 @@ import PostList from "@/components/PostList";
 import PostCard from "@/components/PostCard";
 import ViewToggle from "@/components/ViewToggle";
 import Pagination from "@/components/Pagination";
+import SearchBar from "@/components/SearchBar";
 
 const LIMIT = 10;
 
@@ -96,7 +97,7 @@ export default async function HomePage({ searchParams }: { searchParams: SearchP
               </p>
             </div>
             <div style={{ display: "flex", flexDirection: "column", alignItems: "flex-end", gap: "0.75rem" }}>
-              <div style={{ width: "3px", height: "4.5rem", background: "var(--accent)", borderRadius: "2px" }} />
+              <SearchBar />
               <Link href="/contents" style={{
                 fontSize: "0.6875rem", fontWeight: 700, letterSpacing: "0.08em",
                 color: "var(--accent)", textDecoration: "none", textTransform: "uppercase",
