@@ -8,7 +8,7 @@ export const metadata: Metadata = {
 
 export default function ContactPage() {
   const siteName = process.env.NEXT_PUBLIC_SITE_NAME || "AI전환연구소";
-  const contactEmail = process.env.NEXT_PUBLIC_CONTACT_EMAIL || "rommy0418@gmail.com";
+  const contactEmail = process.env.NEXT_PUBLIC_CONTACT_EMAIL || "ybkim@ipgroup.co.kr";
 
   return (
     <div style={{ background: "var(--bg)", minHeight: "100vh" }}>
@@ -135,7 +135,7 @@ export default function ContactPage() {
           </div>
           <div style={{ padding: "1.5rem" }}>
             <a
-              href="https://www.ipgroup.co.kr"
+              href="http://www.ipgroup.co.kr"
               target="_blank"
               rel="noopener noreferrer"
               style={{
