@@ -41,7 +41,7 @@ export default function AboutPage() {
           fontFamily: "var(--font-serif)",
           fontSize: "clamp(1.75rem, 4vw, 2.5rem)",
           fontWeight: 800,
-          color: "var(--header-text)",
+          color: "var(--ink)",
           lineHeight: 1.2,
           marginBottom: "1rem",
         }}>
