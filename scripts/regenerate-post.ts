@@ -163,7 +163,7 @@ function injectImagesIntoContent(html: string, images: UnsplashResult[]): string
 }
 
 function buildPrompt(topic: Topic): string {
-  const siteName = process.env.NEXT_PUBLIC_SITE_NAME || "내 블로그";
+  const siteName = process.env.NEXT_PUBLIC_SITE_NAME || "AI전환연구소";
   // Note: /auto-blog-setup 스킬이 이 함수를 니치에 맞게 자동 교체합니다
   return `당신은 "${siteName}" 블로그의 전문 작가입니다.
 

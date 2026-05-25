@@ -7,7 +7,7 @@ import ViewToggle from "@/components/ViewToggle";
 import Pagination from "@/components/Pagination";
 import SearchBar from "@/components/SearchBar";
 
-const LIMIT = 10;
+const LIMIT = 9;
 
 const categories: { key: string | null; label: string }[] = [
   { key: null,           label: "전체" },

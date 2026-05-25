@@ -74,7 +74,7 @@ const STRUCTURE_TEMPLATES = [
 ];
 
 function buildPrompt(topic: Topic): string {
-  const siteName = process.env.NEXT_PUBLIC_SITE_NAME || "내 블로그";
+  const siteName = process.env.NEXT_PUBLIC_SITE_NAME || "AI전환연구소";
   const catInstruction = CATEGORY_INSTRUCTIONS[topic.category] || "";
   const structure = STRUCTURE_TEMPLATES[Math.floor(Math.random() * STRUCTURE_TEMPLATES.length)];
 
@@ -205,7 +205,7 @@ function injectImagesIntoContent(html: string, images: UnsplashResult[], topicTi
     const img = images[imgIdx];
     const altText = `${topicTitle} 관련 이미지 ${imgIdx + 1}`;
     const figure = `<figure style="margin:1.75em 0;position:relative;display:block;"><img src="${img.url}" alt="${altText}" loading="lazy" style="width:100%;max-height:400px;object-fit:cover;border-radius:10px;border:1px solid var(--border);display:block;" /><figcaption style="position:absolute;bottom:8px;right:10px;font-size:0.65rem;color:rgba(255,255,255,0.85);background:rgba(0,0,0,0.45);padding:2px 7px;border-radius:4px;line-height:1.5;white-space:nowrap;">${img.attribution}</figcaption></figure>`;
-    parts[partIdx] = parts[partIdx] + figure;
+    parts[partIdx] = figure + parts[partIdx];
   }
   return parts.join(DELIMITER);
 }

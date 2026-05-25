@@ -47,7 +47,7 @@ PostgreSQL via `pg` Pool (`src/lib/db.ts`), connection string from `DATABASE_URL
 ### API Routes (`src/app/api/`)
 
 - `posts/` — GET (paginated list with category filter), POST (admin-only, requires `Authorization: Bearer {ADMIN_API_KEY}`)
-- `posts/[id]/` — GET, PUT, DELETE (admin-only)
+- `posts/[id]/` — GET, PATCH, DELETE (admin-only)
 - `posts/[id]/like/` — POST (visitor likes, hashed IP dedup)
 - `comments/` — GET (by postId), POST (with honeypot + rate limit + hCaptcha)
 - `comments/[id]/` — DELETE (password-verified)

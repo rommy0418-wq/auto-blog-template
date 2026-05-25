@@ -189,7 +189,7 @@ function injectImagesIntoContent(html: string, images: UnsplashResult[], topicTi
       `</figcaption></figure>`,
     ].join("");
 
-    parts[partIdx] = parts[partIdx] + figure;
+    parts[partIdx] = figure + parts[partIdx];
   }
 
   return parts.join(DELIMITER);
@@ -299,7 +299,7 @@ const STRUCTURE_TEMPLATES = [
 
 // ── Gemini 프롬프트 생성 ──────────────────────────
 function buildPrompt(topic: Topic): string {
-  const siteName = process.env.NEXT_PUBLIC_SITE_NAME || "내 블로그";
+  const siteName = process.env.NEXT_PUBLIC_SITE_NAME || "AI전환연구소";
   const catInstruction = CATEGORY_INSTRUCTIONS[topic.category] || "";
   const structure = STRUCTURE_TEMPLATES[Math.floor(Math.random() * STRUCTURE_TEMPLATES.length)];
 
