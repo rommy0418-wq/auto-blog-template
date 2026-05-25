@@ -166,6 +166,9 @@ export default async function PostPage({ params }: Props) {
               <Link href="/contact" style={{ fontSize: "0.75rem", color: "var(--header-muted)", textDecoration: "none" }}>
                 문의
               </Link>
+              <Link href="/contents" style={{ fontSize: "0.75rem", color: "var(--header-muted)", textDecoration: "none" }}>
+                전체 목차
+              </Link>
               <Link href="/" style={{
                 fontSize: "0.75rem",
                 color: "var(--header-muted)",
