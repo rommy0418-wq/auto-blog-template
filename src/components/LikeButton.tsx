@@ -41,20 +41,14 @@ export default function LikeButton({ postId, initialCount }: LikeButtonProps) {
       onClick={handleLike}
       disabled={loading}
       aria-label={liked ? "좋아요 취소" : "좋아요"}
+      className="btn btn-md"
       style={{
-        display: "inline-flex",
-        alignItems: "center",
-        gap: "0.4rem",
-        padding: "0.5rem 1.125rem",
-        borderRadius: "999px",
-        border: `1.5px solid ${liked ? "#fca5a5" : "var(--border)"}`,
-        background: liked ? "#fff0f0" : "var(--bg)",
-        color: liked ? "#dc2626" : "var(--ink-muted)",
+        borderColor: liked ? "#fca5a5" : undefined,
+        background: liked ? "#fff0f0" : undefined,
+        color: liked ? "#dc2626" : undefined,
         fontSize: "0.875rem",
-        fontWeight: 600,
         cursor: loading ? "not-allowed" : "pointer",
         opacity: loading ? 0.6 : 1,
-        transition: "all 0.15s",
       }}
     >
       <span style={{ fontSize: "1rem" }}>{liked ? "❤️" : "🤍"}</span>

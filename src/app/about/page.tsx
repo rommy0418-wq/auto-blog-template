@@ -162,20 +162,7 @@ export default function AboutPage() {
         <p style={{ color: "var(--ink-muted)", fontSize: "0.9375rem", marginBottom: "1rem" }}>
           기업 AI 전환 컨설팅이 필요하시거나 문의사항이 있으신 분들은
         </p>
-        <a
-          href="/contact"
-          style={{
-            display: "inline-block",
-            background: "var(--accent)",
-            color: "#fff",
-            fontWeight: 700,
-            fontSize: "0.9375rem",
-            padding: "0.75rem 2rem",
-            borderRadius: "8px",
-            textDecoration: "none",
-            letterSpacing: "0.02em",
-          }}
-        >
+        <a href="/contact" className="btn btn-lg btn-primary">
           문의하기
         </a>
       </section>

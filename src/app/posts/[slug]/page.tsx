@@ -289,10 +289,10 @@ export default async function PostPage({ params }: Props) {
 
             {/* 좋아요 & 공유 */}
             <div style={{
-              marginTop: "2.5rem",
-              paddingTop: "1.5rem",
+              marginTop: "var(--space-xl)",
+              paddingTop: "var(--space-lg)",
               borderTop: "1px solid var(--border)",
-              display: "flex", alignItems: "center", gap: "0.75rem",
+              display: "flex", alignItems: "center", gap: "var(--space-sm)",
             }}>
               <LikeButton postId={post.id} initialCount={likeCount} />
               <ShareButton title={post.title} />
@@ -371,7 +371,7 @@ export default async function PostPage({ params }: Props) {
 
           {/* ── 댓글 ────────────────────────────── */}
           <CommentSection postId={post.id} />
-          <div style={{ height: "3rem" }} />
+          <div style={{ height: "var(--space-2xl)" }} />
         </main>
       </div>
     </>

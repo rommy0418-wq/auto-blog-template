@@ -98,12 +98,7 @@ export default async function HomePage({ searchParams }: { searchParams: SearchP
             </div>
             <div style={{ display: "flex", flexDirection: "column", alignItems: "flex-end", gap: "0.75rem" }}>
               <SearchBar />
-              <Link href="/contents" style={{
-                fontSize: "0.6875rem", fontWeight: 700, letterSpacing: "0.08em",
-                color: "var(--accent)", textDecoration: "none", textTransform: "uppercase",
-                border: "1px solid var(--accent)", borderRadius: "4px",
-                padding: "0.2rem 0.5rem", opacity: 0.85,
-              }}>
+              <Link href="/contents" className="btn btn-sm btn-outline" style={{ letterSpacing: "0.08em", textTransform: "uppercase" as const }}>
                 전체 목차
               </Link>
             </div>
@@ -152,7 +147,7 @@ export default async function HomePage({ searchParams }: { searchParams: SearchP
           display: "flex",
           alignItems: "center",
           justifyContent: "space-between",
-          padding: "1.25rem 0",
+          padding: "var(--space-lg) 0",
         }}>
           <span style={{ fontSize: "0.8125rem", color: "var(--ink-muted)" }}>
             총{" "}
@@ -170,7 +165,7 @@ export default async function HomePage({ searchParams }: { searchParams: SearchP
           borderRadius: "12px",
           border: "1px solid var(--border)",
           overflow: "hidden",
-          marginBottom: "1.5rem",
+          marginBottom: "var(--space-lg)",
           boxShadow: "0 1px 4px rgba(0,0,0,0.04)",
         }}>
           {currentView === "card" ? (
@@ -189,7 +184,7 @@ export default async function HomePage({ searchParams }: { searchParams: SearchP
           view={currentView}
           category={category}
         />
-        <div style={{ height: "3rem" }} />
+        <div style={{ height: "var(--space-2xl)" }} />
       </main>
     </div>
   );

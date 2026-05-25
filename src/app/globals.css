@@ -32,6 +32,17 @@
   --lv-basic-c: #047857; --lv-basic-bg: #d1fae5;
   --lv-mid-c:   #b45309; --lv-mid-bg:   #fef3c7;
   --lv-adv-c:   #b91c1c; --lv-adv-bg:   #fee2e2;
+
+  /* Spacing scale (8px base) */
+  --space-xs: 0.5rem;
+  --space-sm: 0.75rem;
+  --space-md: 1rem;
+  --space-lg: 1.5rem;
+  --space-xl: 2rem;
+  --space-2xl: 3rem;
+
+  /* Transitions */
+  --transition: 0.15s ease;
 }
 
 /* ── Dark Mode ─────────────────────────────────── */
@@ -66,6 +77,31 @@
     --lv-adv-c:   #f87171; --lv-adv-bg:   #2e0a0a;
   }
 }
+
+/* ── Button system ─────────────────────────────── */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: opacity var(--transition), transform var(--transition), background var(--transition);
+  white-space: nowrap;
+  text-decoration: none;
+  border: 1.5px solid var(--border);
+  background: var(--bg);
+  color: var(--ink-muted);
+}
+.btn:hover { opacity: 0.8; }
+.btn:active { transform: scale(0.97); }
+
+.btn-sm { font-size: 0.75rem; padding: 0.3rem 0.75rem; border-radius: 6px; }
+.btn-md { font-size: 0.8125rem; padding: 0.5rem 1rem; border-radius: 999px; }
+.btn-lg { font-size: 0.9375rem; padding: 0.75rem 2rem; border-radius: 8px; }
+
+.btn-primary { background: var(--accent); color: #fff; border-color: var(--accent); }
+.btn-primary:hover { opacity: 0.85; }
+.btn-outline { background: transparent; border-color: var(--accent); color: var(--accent); }
 
 /* ── Theme fonts ────────────────────────────────── */
 @theme inline {
