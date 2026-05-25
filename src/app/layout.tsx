@@ -11,7 +11,7 @@ const notoSansKR = Noto_Sans_KR({
   variable: "--font-noto-sans-kr",
 });
 
-const siteName = process.env.NEXT_PUBLIC_SITE_NAME || "내 블로그";
+const siteName = process.env.NEXT_PUBLIC_SITE_NAME || "AI전환연구소";
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000";
 
 const googleVerification = process.env.NEXT_PUBLIC_GOOGLE_VERIFICATION;

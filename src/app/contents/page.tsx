@@ -62,7 +62,7 @@ export default async function ContentsPage() {
     <div style={{ background: "var(--bg)", minHeight: "100vh" }}>
 
       {/* 헤더 */}
-      <header style={{ background: "var(--header-bg)", borderBottom: "1px solid #2a2a28" }}>
+      <header style={{ background: "var(--header-bg)", borderBottom: "1px solid var(--border)" }}>
         <div style={{ maxWidth: "56rem", margin: "0 auto", padding: "0.875rem 1.5rem", display: "flex", alignItems: "center", justifyContent: "space-between" }}>
           <Link href="/" style={{ fontFamily: "var(--font-serif)", fontSize: "1rem", fontWeight: 700, color: "var(--header-text)", textDecoration: "none" }}>
             {process.env.NEXT_PUBLIC_SITE_NAME || "AI전환연구소"}

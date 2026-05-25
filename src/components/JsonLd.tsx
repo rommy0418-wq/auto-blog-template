@@ -6,7 +6,7 @@ interface JsonLdProps {
 
 export default function JsonLd({ post }: JsonLdProps) {
   const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000";
-  const siteName = process.env.NEXT_PUBLIC_SITE_NAME || "내 블로그";
+  const siteName = process.env.NEXT_PUBLIC_SITE_NAME || "AI전환연구소";
 
   const schema = {
     "@context": "https://schema.org",

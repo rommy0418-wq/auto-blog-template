@@ -142,7 +142,7 @@ export default async function PostPage({ params }: Props) {
         {/* ── 상단 내비 ─────────────────────────── */}
         <header style={{
           background: "var(--header-bg)",
-          borderBottom: "1px solid #2a2a28",
+          borderBottom: "1px solid var(--border)",
         }}>
           <div style={{
             maxWidth: "52rem", margin: "0 auto",

@@ -84,7 +84,7 @@ export default async function HomePage({ searchParams }: { searchParams: SearchP
                   textDecoration: "none",
                   display: "block",
                 }}>
-                  {process.env.NEXT_PUBLIC_SITE_NAME || "내 블로그"}
+                  {process.env.NEXT_PUBLIC_SITE_NAME || "AI전환연구소"}
                 </Link>
               </h1>
               <p style={{
