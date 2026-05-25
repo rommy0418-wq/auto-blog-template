@@ -17,9 +17,17 @@ export default function AboutPage() {
           <Link href="/" style={{ fontFamily: "var(--font-serif)", fontSize: "1rem", fontWeight: 700, color: "var(--header-text)", textDecoration: "none" }}>
             {siteName}
           </Link>
-          <Link href="/" style={{ fontSize: "0.75rem", color: "var(--header-muted)", textDecoration: "none" }}>
-            ← 홈으로
-          </Link>
+          <nav style={{ display: "flex", alignItems: "center", gap: "var(--space-md)" }}>
+            <Link href="/contact" style={{ fontSize: "0.75rem", color: "var(--header-muted)", textDecoration: "none" }}>
+              문의
+            </Link>
+            <Link href="/contents" style={{ fontSize: "0.75rem", color: "var(--header-muted)", textDecoration: "none" }}>
+              전체 목차
+            </Link>
+            <Link href="/" style={{ fontSize: "0.75rem", color: "var(--header-muted)", textDecoration: "none" }}>
+              ← 홈으로
+            </Link>
+          </nav>
         </div>
       </header>
 

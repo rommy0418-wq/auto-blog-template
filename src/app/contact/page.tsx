@@ -14,21 +14,22 @@ export default function ContactPage() {
     <div style={{ background: "var(--bg)", minHeight: "100vh" }}>
 
       {/* 헤더 */}
-      <header style={{ background: "var(--header-bg)" }}>
-        <div style={{ maxWidth: "52rem", margin: "0 auto", padding: "1.5rem 1.5rem" }}>
-          <Link
-            href="/"
-            style={{
-              display: "inline-flex",
-              alignItems: "center",
-              gap: "0.4rem",
-              fontSize: "0.875rem",
-              color: "var(--header-muted)",
-              textDecoration: "none",
-            }}
-          >
-            ← {siteName}
+      <header style={{ background: "var(--header-bg)", borderBottom: "1px solid var(--border)" }}>
+        <div style={{ maxWidth: "56rem", margin: "0 auto", padding: "0.875rem 1.5rem", display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+          <Link href="/" style={{ fontFamily: "var(--font-serif)", fontSize: "1rem", fontWeight: 700, color: "var(--header-text)", textDecoration: "none" }}>
+            {siteName}
           </Link>
+          <nav style={{ display: "flex", alignItems: "center", gap: "var(--space-md)" }}>
+            <Link href="/about" style={{ fontSize: "0.75rem", color: "var(--header-muted)", textDecoration: "none" }}>
+              소개
+            </Link>
+            <Link href="/contents" style={{ fontSize: "0.75rem", color: "var(--header-muted)", textDecoration: "none" }}>
+              전체 목차
+            </Link>
+            <Link href="/" style={{ fontSize: "0.75rem", color: "var(--header-muted)", textDecoration: "none" }}>
+              ← 홈으로
+            </Link>
+          </nav>
         </div>
       </header>
 
