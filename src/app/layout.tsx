@@ -23,7 +23,7 @@ export const metadata: Metadata = {
     template: `%s | ${siteName}`,
     default: siteName,
   },
-  description: `AI가 매일 글을 쓰는 ${siteName}`,
+  description: `비즈니스 AI 전환을 위한 전략, 사례, 실무 가이드 — ${siteName}`,
   openGraph: {
     type: "website",
     siteName,
