@@ -4,6 +4,9 @@ on:
   schedule:
     - cron: '0 2 * * 1-5' # UTC 02:00 = KST 11:00, Mon-Fri
   workflow_dispatch:
+  push:
+    paths:
+      - '.github/workflows/upgrade-posts.yml'
     inputs:
       batch_size:
         description: 'Number of posts to upgrade'
