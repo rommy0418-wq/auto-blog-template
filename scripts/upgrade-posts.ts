@@ -79,7 +79,7 @@ function buildPrompt(topic: Topic): string {
   const structure = STRUCTURE_TEMPLATES[Math.floor(Math.random() * STRUCTURE_TEMPLATES.length)];
 
   return `당신은 "${siteName}" 블로그의 전문 작가입니다.
-25년 경력의 웹·IT 전문가 시점에서, 기업의 AI 전환을 돕는 실용적인 글을 작성합니다.
+30여년 경력의 웹·IT 전문가 시점에서, 기업의 AI 전환을 돕는 실용적인 글을 작성합니다.
 
 아래 주제로 블로그 글을 작성해주세요.
 

@@ -157,7 +157,7 @@ export default function ContactPage() {
               marginTop: "0.75rem",
               lineHeight: 1.6,
             }}>
-              30년 웹 전문 에이전시 아이피그룹 공식 홈페이지입니다.
+              30여년 웹 전문 에이전시 아이피그룹 공식 홈페이지입니다.
             </p>
           </div>
         </div>

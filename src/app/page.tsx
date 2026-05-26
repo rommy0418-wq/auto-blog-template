@@ -93,7 +93,7 @@ export default async function HomePage({ searchParams }: { searchParams: SearchP
                 marginTop: "0.5rem",
                 letterSpacing: "0.02em",
               }}>
-                25년 웹 전문가의 기업 AI 전환 실전 가이드
+                30여년 현장 경험을 바탕으로 한 기업 AI 전환 전략과 실전 가이드
               </p>
             </div>
             <nav style={{ display: "flex", alignItems: "center", gap: "var(--space-md)" }}>

@@ -1,6 +1,6 @@
 /**
  * 블로그 주제 목록
- * 니치: 기업 AI 전환 실전 가이드 (25년 웹·광고 기획 전문가 관점)
+ * 니치: 기업 AI 전환 실전 가이드 (30여년 웹·광고 기획 전문가 관점)
  */
 
 export interface Topic {
@@ -774,9 +774,9 @@ export const allTopics: Topic[] = [
   },
   {
     index: 123, slug: "cases-013", level: "고급편", category: "cases",
-    title: "25년 에이전시 대표가 본 AI 전환의 본질 — 현장 인사이트",
+    title: "30여년 에이전시 대표가 본 AI 전환의 본질 — 현장 인사이트",
     keywords: "에이전시AI전환,웹에이전시AI,AI전환인사이트",
-    meta_description: "25년간 웹·광고 에이전시를 운영하며 체득한 경험을 바탕으로 AI 전환의 본질과 실전 인사이트를 공유합니다.",
+    meta_description: "30여년간 웹·광고 에이전시를 운영하며 체득한 경험을 바탕으로 AI 전환의 본질과 실전 인사이트를 공유합니다.",
   },
   {
     index: 124, slug: "cases-014", level: "고급편", category: "cases",
