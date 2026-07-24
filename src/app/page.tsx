@@ -1,4 +1,5 @@
 import { Suspense } from "react";
+import type { Metadata } from "next";
 import Link from "next/link";
 import pool from "@/lib/db";
 import PostList from "@/components/PostList";
@@ -8,6 +9,10 @@ import Pagination from "@/components/Pagination";
 import SearchBar from "@/components/SearchBar";
 
 const LIMIT = 9;
+
+export const metadata: Metadata = {
+  alternates: { canonical: "/" },
+};
 
 const categories: { key: string | null; label: string }[] = [
   { key: null,           label: "전체" },

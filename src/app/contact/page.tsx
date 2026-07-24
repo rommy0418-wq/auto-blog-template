@@ -4,6 +4,7 @@ import Link from "next/link";
 export const metadata: Metadata = {
   title: "문의하기",
   description: "AI전환연구소 — AI 컨설팅 의뢰, 강의·교육, 협업 문의",
+  alternates: { canonical: "/contact" },
 };
 
 export default function ContactPage() {

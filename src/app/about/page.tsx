@@ -3,6 +3,7 @@ import Link from "next/link";
 export const metadata = {
   title: "블로그 소개",
   description: "30여년 현장 경험 기반, 기업 AI 전환 전략과 실전 가이드 — AI전환연구소",
+  alternates: { canonical: "/about" },
 };
 
 const siteName = process.env.NEXT_PUBLIC_SITE_NAME || "AI전환연구소";

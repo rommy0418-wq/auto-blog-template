@@ -4,6 +4,7 @@ import Link from "next/link";
 export const metadata: Metadata = {
   title: "개인정보처리방침",
   description: "AI전환연구소 개인정보처리방침 — 개인정보 수집·이용·보관·파기 안내",
+  alternates: { canonical: "/privacy" },
 };
 
 export default function PrivacyPage() {

@@ -6,6 +6,7 @@ import { allTopics } from "@/lib/topics";
 export const metadata: Metadata = {
   title: "전체 커리큘럼",
   description: "130개 주제로 배우는 기업 AI 전환 실전 가이드",
+  alternates: { canonical: "/contents" },
 };
 
 export const revalidate = 3600;

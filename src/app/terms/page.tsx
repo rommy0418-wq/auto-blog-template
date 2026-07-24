@@ -4,6 +4,7 @@ import Link from "next/link";
 export const metadata: Metadata = {
   title: "이용약관",
   description: "AI전환연구소 이용약관 — 서비스 이용 조건, 콘텐츠 저작권, 면책사항 안내",
+  alternates: { canonical: "/terms" },
 };
 
 export default function TermsPage() {
