@@ -142,7 +142,7 @@ export default function PostCard({ posts }: PostCardProps) {
               );
             })}
           </div>
-          {chunkIndex < chunks.length - 1 && (
+          {adSlot && chunkIndex < chunks.length - 1 && (
             <div style={{ marginTop: "1rem" }}>
               <AdBanner slot={adSlot} format="horizontal" />
             </div>

@@ -6,6 +6,7 @@ import JsonLd from "@/components/JsonLd";
 import CommentSection from "@/components/CommentSection";
 import LikeButton from "@/components/LikeButton";
 import ShareButton from "@/components/ShareButton";
+import AdBanner from "@/components/AdBanner";
 import Link from "next/link";
 import { sanitizePostHtml } from "@/lib/sanitize";
 
@@ -133,6 +134,8 @@ export default async function PostPage({ params }: Props) {
 
   const safeContent = sanitizePostHtml(post.content);
   const { tocItems, contentHtml } = buildToc(safeContent);
+  const contentSections = contentHtml.split(/(?=<h2\b)/i);
+  const articleAdSlot = process.env.NEXT_PUBLIC_ADSENSE_SLOT_ARTICLE || "";
   const plainText = post.content.replace(/<[^>]+>/g, "");
   const readingMinutes = Math.max(1, Math.round(plainText.length / 800));
 
@@ -295,10 +298,18 @@ export default async function PostPage({ params }: Props) {
             )}
 
             {/* 본문 */}
-            <div
-              className="prose"
-              dangerouslySetInnerHTML={{ __html: contentHtml }}
-            />
+            <div className="prose">
+              {contentSections.map((section, index) => (
+                <div key={index}>
+                  <div dangerouslySetInnerHTML={{ __html: section }} />
+                  {articleAdSlot && (index === 2 || index === 5) && (
+                    <div className="article-ad-slot" aria-label="광고">
+                      <AdBanner slot={articleAdSlot} format="auto" />
+                    </div>
+                  )}
+                </div>
+              ))}
+            </div>
 
             <aside className="content-disclosure" aria-label="콘텐츠 작성 안내">
               <strong>콘텐츠 작성 안내</strong>

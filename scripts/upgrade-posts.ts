@@ -75,11 +75,13 @@ const STRUCTURE_TEMPLATES = [
 
 function buildPrompt(topic: Topic): string {
   const siteName = process.env.NEXT_PUBLIC_SITE_NAME || "AI전환연구소";
+  const currentDate = new Date().toISOString().slice(0, 10);
   const catInstruction = CATEGORY_INSTRUCTIONS[topic.category] || "";
   const structure = STRUCTURE_TEMPLATES[Math.floor(Math.random() * STRUCTURE_TEMPLATES.length)];
 
   return `당신은 "${siteName}" 블로그의 전문 작가입니다.
 30여년 경력의 웹·IT 전문가 시점에서, 기업의 AI 전환을 돕는 실용적인 글을 작성합니다.
+작성 기준일은 ${currentDate}입니다.
 
 아래 주제로 블로그 글을 작성해주세요.
 
@@ -103,6 +105,12 @@ function buildPrompt(topic: Topic): string {
 - 특정 기업의 실제 매출/성과 수치를 임의로 만들지 말 것. 가상의 사례는 "A사", "B사"로 표기하고 "가상 사례"임을 명시
 - "~할 수 있습니다", "~가 기대됩니다" 등 가능성 표현 사용. "반드시 ~됩니다" 같은 단정 금지
 - 과장된 수익 약속 금지 (예: "월 1천만원 보장" → "수익 구조를 만들 수 있습니다")
+- 공식 자료가 입력으로 제공되지 않았으므로 제품의 정확한 가격, 요금제 금액, 모델 버전,
+  출시·접근 상태를 단정하지 말 것
+- 변경 가능성이 큰 정보는 구체적 숫자 대신 비교 기준을 설명하고
+  "공식 사이트에서 최신 정보를 확인해야 합니다"라고 안내할 것
+- 존재하지 않는 보고서, 조사기관, 링크, 출처를 만들지 말 것
+- "최신", "현재", "최근 출시"라는 표현은 검증할 수 없으면 사용하지 말 것
 
 ${catInstruction}
 

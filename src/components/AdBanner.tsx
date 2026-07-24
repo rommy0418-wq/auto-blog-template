@@ -30,7 +30,11 @@ export default function AdBanner({ slot, format = "auto", className }: AdBannerP
     }
   }, [isDev, clientId, slot]);
 
-  if (isDev || !clientId || !slot) {
+  if (!isDev && (!clientId || !slot)) {
+    return null;
+  }
+
+  if (isDev) {
     return (
       <div
         className={className}

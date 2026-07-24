@@ -98,13 +98,16 @@ export default function PostList({ posts }: PostListProps) {
               </div>
             )}
 
-            {/* 본문 */}
-            {post.content && (
-              <div
-                className="prose"
-                style={{ marginTop: "1.25rem" }}
-                dangerouslySetInnerHTML={{ __html: post.content }}
-              />
+            {/* 요약 */}
+            {post.meta_description && (
+              <p style={{
+                margin: "1rem 0 0",
+                color: "var(--ink-muted)",
+                fontSize: "0.9375rem",
+                lineHeight: 1.7,
+              }}>
+                {post.meta_description}
+              </p>
             )}
 
             {/* 하단 */}
@@ -123,7 +126,7 @@ export default function PostList({ posts }: PostListProps) {
               <PostShareButton slug={post.slug || ""} title={post.title || ""} />
             </div>
           </article>
-          {index % 3 === 2 && index < posts.length - 1 && (
+          {adSlot && index % 3 === 2 && index < posts.length - 1 && (
             <div className="feed-ad-slot">
               <AdBanner slot={adSlot} format="horizontal" />
             </div>
