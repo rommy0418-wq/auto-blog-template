@@ -46,10 +46,7 @@ export default function SearchBar() {
   }, []);
 
   useEffect(() => {
-    if (query.length < 2) {
-      setResults([]);
-      return;
-    }
+    if (query.length < 2) return;
     clearTimeout(timerRef.current);
     timerRef.current = setTimeout(async () => {
       setLoading(true);
@@ -62,6 +59,7 @@ export default function SearchBar() {
       }
       setLoading(false);
     }, 300);
+    return () => clearTimeout(timerRef.current);
   }, [query]);
 
   if (!open) {
@@ -111,7 +109,14 @@ export default function SearchBar() {
           ref={inputRef}
           type="text"
           value={query}
-          onChange={(e) => setQuery(e.target.value)}
+          onChange={(e) => {
+            const nextQuery = e.target.value;
+            setQuery(nextQuery);
+            if (nextQuery.length < 2) {
+              setResults([]);
+              setLoading(false);
+            }
+          }}
           placeholder="글 제목, 키워드 검색..."
           style={{
             background: "transparent",

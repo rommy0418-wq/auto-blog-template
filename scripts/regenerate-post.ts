@@ -191,7 +191,7 @@ function buildPrompt(topic: Topic): string {
 <h2>💡 AI 도구 활용 팁</h2>
 <p>...</p>
 <ul><li>...</li></ul>
-<blockquote>프롬프트 예시: "..."</blockquote>\`;
+<blockquote>프롬프트 예시: "..."</blockquote>`;
 }
 
 function cleanHtml(raw: string): string {

@@ -7,6 +7,7 @@ import CommentSection from "@/components/CommentSection";
 import LikeButton from "@/components/LikeButton";
 import ShareButton from "@/components/ShareButton";
 import Link from "next/link";
+import { sanitizePostHtml } from "@/lib/sanitize";
 
 export const revalidate = 3600;
 
@@ -130,7 +131,8 @@ export default async function PostPage({ params }: Props) {
     : levelLabel === "중급" ? "badge badge-mid"
     : "badge badge-adv";
 
-  const { tocItems, contentHtml } = buildToc(post.content);
+  const safeContent = sanitizePostHtml(post.content);
+  const { tocItems, contentHtml } = buildToc(safeContent);
   const plainText = post.content.replace(/<[^>]+>/g, "");
   const readingMinutes = Math.max(1, Math.round(plainText.length / 800));
 
@@ -297,6 +299,15 @@ export default async function PostPage({ params }: Props) {
               className="prose"
               dangerouslySetInnerHTML={{ __html: contentHtml }}
             />
+
+            <aside className="content-disclosure" aria-label="콘텐츠 작성 안내">
+              <strong>콘텐츠 작성 안내</strong>
+              <p>
+                이 글은 AI를 활용해 생성·편집된 정보성 콘텐츠입니다.
+                제품 기능과 요금 등은 변경될 수 있으므로 중요한 의사결정 전
+                공식 자료를 함께 확인해 주세요.
+              </p>
+            </aside>
 
             {/* 좋아요 & 공유 */}
             <div style={{

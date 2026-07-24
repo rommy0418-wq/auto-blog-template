@@ -309,6 +309,23 @@ body {
   color: var(--ink-mid);
 }
 
+.content-disclosure {
+  margin-top: var(--space-xl);
+  padding: 1rem 1.125rem;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: var(--border-light);
+  color: var(--ink-muted);
+  font-size: 0.8125rem;
+  line-height: 1.65;
+}
+.content-disclosure strong {
+  display: block;
+  margin-bottom: 0.25rem;
+  color: var(--ink);
+}
+.content-disclosure p { margin: 0; }
+
 .prose h2,
 .prose h3,
 .prose h4 {

@@ -52,7 +52,7 @@ export default function PrivacyPage() {
         <div className="prose" style={{ fontSize: "0.9375rem", lineHeight: 1.85 }}>
 
           <p>
-            <strong>{siteName}</strong>(이하 "본 사이트")는 이용자의 개인정보를 중요시하며,
+            <strong>{siteName}</strong>(이하 &ldquo;본 사이트&rdquo;)는 이용자의 개인정보를 중요시하며,
             「개인정보 보호법」 등 관련 법령을 준수합니다. 본 방침은 본 사이트가
             어떠한 개인정보를 수집하고, 어떻게 이용·보호하는지 안내합니다.
           </p>

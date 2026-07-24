@@ -59,7 +59,7 @@ export default function CommentForm({ postId, onCommentAdded }: CommentFormProps
       setCaptchaRequired(false);
       setSuccess(true);
       setTimeout(() => setSuccess(false), 3000);
-      onCommentAdded();
+      if (!data.pendingApproval) onCommentAdded();
     } catch {
       setError("네트워크 오류가 발생했습니다.");
     } finally {
@@ -141,7 +141,9 @@ export default function CommentForm({ postId, onCommentAdded }: CommentFormProps
       )}
 
       {success && (
-        <p className="text-sm text-green-600">댓글이 등록되었습니다.</p>
+        <p className="text-sm text-green-600">
+          댓글이 접수되었습니다. 운영자 확인 후 공개됩니다.
+        </p>
       )}
 
       <div className="flex justify-end">

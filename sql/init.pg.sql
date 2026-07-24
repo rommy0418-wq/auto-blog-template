@@ -13,6 +13,7 @@ CREATE TABLE IF NOT EXISTS posts (
   content          TEXT NOT NULL,
   slug             VARCHAR(255) NOT NULL UNIQUE,
   category         VARCHAR(50) DEFAULT 'general',
+  level            VARCHAR(20) DEFAULT NULL,
   thumbnail_url    VARCHAR(500) DEFAULT NULL,
   meta_description VARCHAR(300) DEFAULT NULL,
   keywords         VARCHAR(500) DEFAULT NULL,
@@ -20,6 +21,7 @@ CREATE TABLE IF NOT EXISTS posts (
   published_at     TIMESTAMPTZ DEFAULT NULL,
   created_at       TIMESTAMPTZ DEFAULT NOW(),
   updated_at       TIMESTAMPTZ DEFAULT NOW(),
+  upgraded_at      TIMESTAMPTZ DEFAULT NULL,
   view_count       INT DEFAULT 0
 );
 
@@ -31,7 +33,19 @@ CREATE INDEX IF NOT EXISTS idx_slug ON posts (slug);
 CREATE OR REPLACE FUNCTION update_updated_at()
 RETURNS TRIGGER AS $$
 BEGIN
-  NEW.updated_at = NOW();
+  IF ROW(
+    NEW.title, NEW.content, NEW.slug, NEW.category, NEW.level,
+    NEW.thumbnail_url, NEW.meta_description, NEW.keywords,
+    NEW.status, NEW.published_at, NEW.upgraded_at
+  ) IS DISTINCT FROM ROW(
+    OLD.title, OLD.content, OLD.slug, OLD.category, OLD.level,
+    OLD.thumbnail_url, OLD.meta_description, OLD.keywords,
+    OLD.status, OLD.published_at, OLD.upgraded_at
+  ) THEN
+    NEW.updated_at = NOW();
+  ELSE
+    NEW.updated_at = OLD.updated_at;
+  END IF;
   RETURN NEW;
 END;
 $$ LANGUAGE plpgsql;

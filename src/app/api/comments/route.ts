@@ -87,12 +87,15 @@ export async function POST(request: NextRequest) {
 
     const result = await pool.query(
       `INSERT INTO comments (post_id, nickname, password, content, ip_hash, is_approved)
-       VALUES ($1, $2, $3, $4, $5, TRUE)
+       VALUES ($1, $2, $3, $4, $5, FALSE)
        RETURNING id`,
       [postId, nickname, passwordHash, content, ipHash]
     );
 
-    return NextResponse.json({ id: result.rows[0].id, success: true }, { status: 201 });
+    return NextResponse.json(
+      { id: result.rows[0].id, success: true, pendingApproval: true },
+      { status: 201 }
+    );
   } catch (error) {
     console.error("POST /api/comments error:", error);
     return NextResponse.json({ error: "Internal server error" }, { status: 500 });
