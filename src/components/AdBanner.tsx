@@ -19,7 +19,7 @@ declare global {
 export default function AdBanner({ slot, format = "auto", className }: AdBannerProps) {
   const adRef = useRef<HTMLModElement>(null);
   const isDev = process.env.NODE_ENV === "development";
-  const clientId = process.env.NEXT_PUBLIC_ADSENSE_CLIENT || "";
+  const clientId = process.env.NEXT_PUBLIC_ADSENSE_CLIENT || "ca-pub-1757993057652416";
 
   useEffect(() => {
     if (isDev || !clientId || !slot) return;

@@ -16,6 +16,7 @@ const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000";
 
 const googleVerification = process.env.NEXT_PUBLIC_GOOGLE_VERIFICATION;
 const naverVerification = process.env.NEXT_PUBLIC_NAVER_VERIFICATION;
+const adsenseClient = process.env.NEXT_PUBLIC_ADSENSE_CLIENT || "ca-pub-1757993057652416";
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
@@ -31,6 +32,9 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
+  },
+  other: {
+    "google-adsense-account": adsenseClient,
   },
   ...(googleVerification || naverVerification
     ? {
@@ -49,7 +53,6 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const adsenseClient = process.env.NEXT_PUBLIC_ADSENSE_CLIENT;
   const gaId = process.env.NEXT_PUBLIC_GA_ID;
 
   return (
