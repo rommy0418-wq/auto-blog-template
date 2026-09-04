@@ -413,17 +413,18 @@ function writeLog(message: string): void {
 // ── 메인 실행 ─────────────────────────────────────
 async function main() {
   writeLog("=== 글 자동 생성 시작 ===");
+  const totalTopics = allTopics.length;
 
   try {
     const topic = await getNextTopic();
 
     if (!topic) {
-      writeLog("✅ 모든 주제(130개)가 발행 완료됐습니다!");
+      writeLog(`✅ 모든 주제(${totalTopics}개)가 발행 완료됐습니다!`);
       await pool.end();
       return;
     }
 
-    writeLog(`📝 주제 선택: [${topic.level}] ${topic.index}/130 - ${topic.title}`);
+    writeLog(`📝 주제 선택: [${topic.level}] ${topic.index}/${totalTopics} - ${topic.title}`);
 
     // Gemini로 글 생성
     writeLog("🤖 Gemini로 글 생성 중...");

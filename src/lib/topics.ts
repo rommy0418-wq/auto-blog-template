@@ -13,7 +13,7 @@ export interface Topic {
   meta_description: string;
 }
 
-export const allTopics: Topic[] = [
+const originalTopics: Topic[] = [
 
   // ── 기초편 / foundation (AI 입문·트렌드) ──────────────────────────
   {
@@ -822,4 +822,55 @@ export const allTopics: Topic[] = [
     keywords: "AI전환1년,AI도입결과,AI전환후기",
     meta_description: "AI 전환을 결정하고 1년이 지난 시점에서 실제 비즈니스에 어떤 변화가 생겼는지 솔직하게 돌아봅니다.",
   },
+];
+
+type ContinuedTopic = Omit<Topic, "index">;
+
+const continuedTopics: ContinuedTopic[] = [
+  { slug: "foundation-017", level: "기초편", category: "foundation", title: "AI 에이전트란 무엇인가 — 중소기업 대표를 위한 쉬운 설명", keywords: "AI에이전트,중소기업AI,AI기초", meta_description: "AI 에이전트의 개념과 일반 챗봇과의 차이, 중소기업에서 바로 적용할 수 있는 업무를 쉽게 설명합니다." },
+  { slug: "foundation-018", level: "기초편", category: "foundation", title: "우리 회사 AI 준비도 진단 — 20문항 자가 체크리스트", keywords: "AI준비도,AI도입진단,중소기업AI체크리스트", meta_description: "데이터·인력·업무·보안 관점의 20문항으로 우리 회사의 AI 도입 준비 수준을 스스로 점검합니다." },
+  { slug: "foundation-019", level: "기초편", category: "foundation", title: "AI 도입 담당자는 누구여야 할까 — 전담팀 없는 회사의 현실적 해법", keywords: "AI담당자,AI전담팀,중소기업AI조직", meta_description: "전담 조직이 없는 중소기업에서 AI 도입을 이끌 담당자와 협업 체계를 현실적으로 설계하는 방법입니다." },
+  { slug: "foundation-020", level: "중급편", category: "foundation", title: "AI 답변을 믿어도 될까 — 환각을 줄이는 검증 습관 7가지", keywords: "AI환각,AI답변검증,생성형AI주의사항", meta_description: "생성형 AI의 환각 위험을 이해하고 업무 결과를 안전하게 검증하는 일곱 가지 실전 습관을 소개합니다." },
+  { slug: "foundation-021", level: "중급편", category: "foundation", title: "사내 AI 사용 가이드라인 만드는 법 — 바로 쓰는 항목별 기준", keywords: "AI사용가이드라인,사내AI정책,AI보안", meta_description: "직원들이 안전하고 일관되게 AI를 사용하도록 사내 가이드라인에 포함할 기준과 운영 방법을 정리합니다." },
+  { slug: "foundation-022", level: "중급편", category: "foundation", title: "AI 교육은 어떻게 시작할까 — 직원 수준별 4주 학습 로드맵", keywords: "AI직원교육,AI교육로드맵,기업AI교육", meta_description: "비전공 직원도 업무에 AI를 적용할 수 있도록 기초부터 실습까지 이어지는 4주 교육 로드맵을 제시합니다." },
+
+  { slug: "tools-034", level: "기초편", category: "tools", title: "ChatGPT 프로젝트 기능 업무 활용법 — 자료와 대화를 한곳에", keywords: "ChatGPT프로젝트,ChatGPT업무활용,AI자료관리", meta_description: "업무별 자료와 지침, 대화를 ChatGPT 프로젝트로 관리해 반복 작업의 효율을 높이는 방법을 설명합니다." },
+  { slug: "tools-035", level: "기초편", category: "tools", title: "Gemini로 구글 문서 업무 자동화 — Gmail부터 Sheets까지", keywords: "Gemini업무활용,구글문서AI,Gmail자동화", meta_description: "Gemini를 Gmail·Docs·Sheets에 적용해 이메일, 문서, 데이터 정리 업무를 줄이는 방법을 안내합니다." },
+  { slug: "tools-036", level: "중급편", category: "tools", title: "Claude로 긴 문서 분석하기 — 계약서·보고서 검토 워크플로우", keywords: "Claude문서분석,AI계약서검토,보고서AI", meta_description: "Claude를 활용해 긴 계약서와 보고서의 핵심 내용을 추출하고 검토할 때 필요한 안전한 절차를 설명합니다." },
+  { slug: "tools-037", level: "중급편", category: "tools", title: "NotebookLM 사내 지식관리 — 흩어진 자료를 AI에게 묻는 법", keywords: "NotebookLM,사내지식관리,AI문서검색", meta_description: "흩어진 사내 자료를 NotebookLM으로 정리하고 출처 기반 답변을 얻는 지식관리 활용법을 소개합니다." },
+  { slug: "tools-038", level: "중급편", category: "tools", title: "Make와 n8n 비교 — 중소기업 AI 자동화 도구 선택 기준", keywords: "Make,n8n,AI업무자동화", meta_description: "Make와 n8n의 비용, 난이도, 보안, 확장성을 비교해 회사에 맞는 자동화 도구를 선택하도록 돕습니다." },
+  { slug: "tools-039", level: "고급편", category: "tools", title: "AI 에이전트 업무 자동화 구축 — 승인 절차를 포함한 안전한 설계", keywords: "AI에이전트구축,업무자동화,AI승인절차", meta_description: "AI 에이전트가 업무를 실행할 때 사람의 승인과 감사 기록을 포함하는 안전한 자동화 구조를 설계합니다." },
+
+  { slug: "marketing-024", level: "기초편", category: "marketing", title: "AI 검색에 우리 회사가 나오게 하는 법 — GEO 입문 가이드", keywords: "GEO,AI검색노출,생성형엔진최적화", meta_description: "ChatGPT와 생성형 검색에서 회사와 콘텐츠가 인용될 가능성을 높이는 GEO 기본 원칙을 설명합니다." },
+  { slug: "marketing-025", level: "기초편", category: "marketing", title: "AI로 고객 인터뷰 분석하기 — 구매 이유와 불만 찾는 법", keywords: "고객인터뷰AI,고객분석,AI마케팅", meta_description: "고객 인터뷰와 상담 기록을 AI로 분류해 구매 이유, 불만, 개선 기회를 찾는 실전 방법입니다." },
+  { slug: "marketing-026", level: "중급편", category: "marketing", title: "B2B 콘텐츠 전략 — AI로 검색 수요에서 상담까지 연결하기", keywords: "B2B콘텐츠전략,AI마케팅,리드생성", meta_description: "B2B 고객의 검색 의도를 분석하고 AI로 콘텐츠를 제작해 상담 전환까지 연결하는 전략을 제시합니다." },
+  { slug: "marketing-027", level: "중급편", category: "marketing", title: "AI 뉴스레터 자동화 — 기획·작성·발송 성과 분석", keywords: "AI뉴스레터,이메일마케팅자동화,콘텐츠자동화", meta_description: "뉴스레터 주제 선정부터 초안 작성, 발송 후 성과 분석까지 AI로 효율화하는 워크플로우를 안내합니다." },
+  { slug: "marketing-028", level: "중급편", category: "marketing", title: "검색 클릭률 높이는 제목과 설명 — AI로 개선하는 실전법", keywords: "검색클릭률,메타설명,AI SEO", meta_description: "검색 노출은 있지만 클릭이 적을 때 AI로 제목과 메타 설명을 개선하고 성과를 검증하는 방법입니다." },
+  { slug: "marketing-029", level: "고급편", category: "marketing", title: "AI 콘텐츠 품질 관리 — 대량 생산 블로그가 실패하지 않는 기준", keywords: "AI콘텐츠품질,자동블로그,콘텐츠검수", meta_description: "AI 콘텐츠를 지속 발행하면서 중복, 오류, 신뢰도 저하를 막기 위한 편집 및 품질관리 기준을 설명합니다." },
+
+  { slug: "transform-027", level: "기초편", category: "transform", title: "중소기업 AI 전환 로드맵 — 90일 안에 첫 성과 만드는 법", keywords: "AI전환로드맵,중소기업AI,90일AI도입", meta_description: "중소기업이 90일 안에 첫 AI 성과를 만들 수 있도록 진단, 실험, 확산 단계의 실행 계획을 제시합니다." },
+  { slug: "transform-028", level: "중급편", category: "transform", title: "AI PoC 주제 고르는 법 — 실패 비용을 줄이는 우선순위 공식", keywords: "AI PoC,AI과제선정,AI우선순위", meta_description: "효과, 난이도, 데이터, 위험을 기준으로 첫 AI 실증 과제를 선정하는 현실적인 평가법을 소개합니다." },
+  { slug: "transform-029", level: "중급편", category: "transform", title: "AI 도입 ROI 계산법 — 시간 절감부터 매출 효과까지", keywords: "AI ROI,AI투자효과,AI성과측정", meta_description: "AI 도입의 시간 절감, 비용 감소, 매출 증가 효과를 측정하고 투자 타당성을 계산하는 방법입니다." },
+  { slug: "transform-030", level: "중급편", category: "transform", title: "AI 전환에 직원이 반대할 때 — 현장 저항을 줄이는 변화관리", keywords: "AI변화관리,직원저항,AI조직문화", meta_description: "AI 도입 과정에서 발생하는 직원 불안과 저항을 줄이고 참여를 높이는 변화관리 실행법을 안내합니다." },
+  { slug: "transform-031", level: "고급편", category: "transform", title: "AI 거버넌스 구축 — 책임·권한·검토 체계 설계", keywords: "AI거버넌스,책임있는AI,AI관리체계", meta_description: "기업이 AI를 안전하게 확산하기 위해 책임자, 승인 기준, 위험 검토, 기록 관리 체계를 설계하는 방법입니다." },
+  { slug: "transform-032", level: "고급편", category: "transform", title: "레거시 시스템과 AI 연결하기 — 전면 교체 없는 단계별 전략", keywords: "레거시AI연동,AI시스템통합,기업AI전환", meta_description: "기존 ERP·CRM을 전면 교체하지 않고 API와 자동화를 활용해 AI 기능을 단계적으로 연결하는 전략입니다." },
+
+  { slug: "business-017", level: "기초편", category: "business", title: "1인기업 AI 비서 만들기 — 일정·메일·자료조사 자동화", keywords: "1인기업AI,AI비서,업무자동화", meta_description: "1인기업 대표가 일정, 이메일, 자료조사 업무를 AI 비서 방식으로 자동화하는 현실적인 시작법입니다." },
+  { slug: "business-018", level: "기초편", category: "business", title: "AI로 전문지식 상품화하기 — 전자책부터 컨설팅까지", keywords: "지식상품AI,전자책AI,AI컨설팅", meta_description: "보유한 경험과 전문지식을 AI로 정리해 전자책, 강의, 컨설팅 상품으로 발전시키는 방법을 안내합니다." },
+  { slug: "business-019", level: "중급편", category: "business", title: "AI 상담 챗봇 만들기 — 작은 회사 홈페이지 적용 가이드", keywords: "AI상담챗봇,홈페이지챗봇,고객상담자동화", meta_description: "작은 회사가 홈페이지에 AI 상담 챗봇을 도입할 때 필요한 자료, 도구, 운영 기준을 설명합니다." },
+  { slug: "business-020", level: "중급편", category: "business", title: "AI로 제안서 수주율 높이기 — 고객 맞춤형 작성 시스템", keywords: "AI제안서,수주율,제안서자동화", meta_description: "고객 요구사항을 분석하고 맞춤형 제안서를 빠르게 작성하며 품질을 검수하는 AI 활용 체계를 소개합니다." },
+  { slug: "business-021", level: "중급편", category: "business", title: "소규모 에이전시 AI 운영체계 — 사람은 적고 생산성은 높게", keywords: "에이전시AI,소규모회사자동화,AI생산성", meta_description: "소규모 에이전시가 영업, 기획, 제작, 보고 업무에 AI를 배치해 생산성을 높이는 운영체계를 설계합니다." },
+  { slug: "business-022", level: "고급편", category: "business", title: "AI 서비스 가격 책정 — 자동화 가치로 수익모델 만드는 법", keywords: "AI서비스가격,AI수익모델,자동화컨설팅", meta_description: "AI 자동화 서비스의 비용과 고객 가치를 계산해 구축비, 구독료, 성과형 요금을 설계하는 방법입니다." },
+
+  { slug: "cases-017", level: "기초편", category: "cases", title: "직원 10명 제조기업의 AI 첫 도입 — 어디서 시작했나", keywords: "제조업AI사례,중소기업AI도입,AI첫프로젝트", meta_description: "직원 10명 규모의 가상 제조기업을 통해 첫 AI 과제 선정부터 현장 적용까지의 과정을 분석합니다." },
+  { slug: "cases-018", level: "중급편", category: "cases", title: "고객센터 AI 도입 사례 — 상담시간을 줄이고 품질을 지킨 방법", keywords: "고객센터AI,상담자동화,AI도입사례", meta_description: "가상 고객센터 사례로 AI 요약과 답변 지원을 도입하면서 상담 품질과 개인정보를 관리한 방법을 살펴봅니다." },
+  { slug: "cases-019", level: "중급편", category: "cases", title: "건설회사 AI 문서 자동화 사례 — 견적·보고·안전자료 개선", keywords: "건설AI,문서자동화,AI도입사례", meta_description: "가상 건설기업이 견적서, 현장 보고서, 안전자료 작성에 AI를 적용한 과정과 주의점을 분석합니다." },
+  { slug: "cases-020", level: "중급편", category: "cases", title: "온라인 쇼핑몰 AI 전환 사례 — 상품등록부터 재구매까지", keywords: "쇼핑몰AI,이커머스자동화,AI마케팅사례", meta_description: "가상 쇼핑몰이 상품 등록, 고객 응대, 개인화 마케팅을 AI로 개선한 단계별 과정을 소개합니다." },
+  { slug: "cases-021", level: "고급편", category: "cases", title: "AI 프로젝트 실패 복기 — 데이터보다 먼저 놓친 세 가지", keywords: "AI프로젝트실패,AI도입교훈,AI전환사례", meta_description: "가상 실패 사례를 통해 목표 정의, 현장 참여, 운영 책임이 AI 프로젝트 성패에 미치는 영향을 분석합니다." },
+  { slug: "cases-022", level: "고급편", category: "cases", title: "AI 전환 우수기업 비교 — 기술보다 운영에서 갈린 성과", keywords: "AI우수기업,AI전환비교,AI운영전략", meta_description: "가상 기업 비교를 통해 비슷한 기술을 도입하고도 운영 방식에 따라 성과가 달라지는 이유를 설명합니다." },
+];
+
+export const allTopics: Topic[] = [
+  ...originalTopics,
+  ...continuedTopics.map((topic, offset) => ({ ...topic, index: originalTopics.length + offset + 1 })),
 ];

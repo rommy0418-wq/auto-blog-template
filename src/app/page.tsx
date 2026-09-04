@@ -10,10 +10,6 @@ import SearchBar from "@/components/SearchBar";
 
 const LIMIT = 9;
 
-export const metadata: Metadata = {
-  alternates: { canonical: "/" },
-};
-
 const categories: { key: string | null; label: string }[] = [
   { key: null,           label: "전체" },
   { key: "foundation",   label: "AI 입문" },
@@ -29,6 +25,16 @@ type SearchParams = Promise<{
   page?: string;
   category?: string;
 }>;
+
+export async function generateMetadata({ searchParams }: { searchParams: SearchParams }): Promise<Metadata> {
+  const { view, page, category } = await searchParams;
+  const hasListState = Boolean(view || page || category);
+
+  return {
+    alternates: { canonical: "/" },
+    robots: hasListState ? { index: false, follow: true } : undefined,
+  };
+}
 
 export default async function HomePage({ searchParams }: { searchParams: SearchParams }) {
   const { view = "list", page = "1", category } = await searchParams;

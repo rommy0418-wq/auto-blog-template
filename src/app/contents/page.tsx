@@ -5,7 +5,7 @@ import { allTopics } from "@/lib/topics";
 
 export const metadata: Metadata = {
   title: "전체 커리큘럼",
-  description: "130개 주제로 배우는 기업 AI 전환 실전 가이드",
+  description: `${allTopics.length}개 주제로 배우는 기업 AI 전환 실전 가이드`,
   alternates: { canonical: "/contents" },
 };
 
@@ -90,7 +90,7 @@ export default async function ContentsPage() {
             전체 커리큘럼
           </h1>
           <p style={{ fontSize: "0.875rem", color: "var(--ink-muted)", marginBottom: "1.25rem" }}>
-            130개 주제로 배우는 기업 AI 전환 실전 가이드
+            {allTopics.length}개 주제로 배우는 기업 AI 전환 실전 가이드
           </p>
 
           {/* 진행률 바 */}
