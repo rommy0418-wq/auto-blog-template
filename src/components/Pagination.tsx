@@ -12,10 +12,10 @@ export default function Pagination({ currentPage, totalPages, view, category }: 
 
   const buildHref = (page: number) => {
     const params = new URLSearchParams();
-    params.set("view", view);
-    params.set("page", String(page));
+    if (view === "card") params.set("view", view);
+    if (page > 1) params.set("page", String(page));
     if (category) params.set("category", category);
-    return `/?${params.toString()}`;
+    return params.size ? `/?${params.toString()}` : "/";
   };
 
   const startPage = Math.max(1, currentPage - 2);

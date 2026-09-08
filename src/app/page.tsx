@@ -1,6 +1,7 @@
 import { Suspense } from "react";
 import type { Metadata } from "next";
 import Link from "next/link";
+import { notFound } from "next/navigation";
 import pool from "@/lib/db";
 import PostList from "@/components/PostList";
 import PostCard from "@/components/PostCard";
@@ -27,12 +28,18 @@ type SearchParams = Promise<{
 }>;
 
 export async function generateMetadata({ searchParams }: { searchParams: SearchParams }): Promise<Metadata> {
-  const { view, page, category } = await searchParams;
-  const hasListState = Boolean(view || page || category);
+  const { page = "1", category } = await searchParams;
+  const currentPage = Number(page);
+  const valid = Number.isSafeInteger(currentPage) && currentPage > 0 &&
+    (!category || categories.some((item) => item.key === category));
+  const params = new URLSearchParams();
+  if (category) params.set("category", category);
+  if (currentPage > 1) params.set("page", String(currentPage));
+  const canonical = params.size ? `/?${params.toString()}` : "/";
 
   return {
-    alternates: { canonical: "/" },
-    robots: hasListState ? { index: false, follow: true } : undefined,
+    alternates: { canonical },
+    robots: { index: valid, follow: true },
   };
 }
 
@@ -40,7 +47,9 @@ export default async function HomePage({ searchParams }: { searchParams: SearchP
   const { view = "list", page = "1", category } = await searchParams;
 
   const currentView = view === "card" ? "card" : "list";
-  const currentPage = Math.max(1, Number(page) || 1);
+  const currentPage = Number(page);
+  if (!Number.isSafeInteger(currentPage) || currentPage < 1 ||
+      (category && !categories.some((item) => item.key === category))) notFound();
   const offset = (currentPage - 1) * LIMIT;
 
   const whereCategory = category ? " AND category = $1" : "";
@@ -56,6 +65,7 @@ export default async function HomePage({ searchParams }: { searchParams: SearchP
     countParams
   );
   const total = Number(countResult.rows[0].total);
+  if (currentPage > Math.max(1, Math.ceil(total / LIMIT))) notFound();
 
   const { rows: posts } = await pool.query(
     `SELECT id, title, slug, category, level, thumbnail_url, meta_description, content, published_at, view_count
