@@ -7,7 +7,9 @@
 - AdSense last update: 2026-09-13 17:40 KST.
 - ads.txt: approved. This is not site approval.
 - Google did not identify individual offending articles.
-- No re-review request submitted: sitewide editorial work remains.
+- No re-review request submitted. The complete139-post editorial pass and site
+  corrections are documented in `sitewide-audit-2026-09-16.md`; earlier batches
+  below are historical progress notes, not the latest completion status.
 
 ## Read-only audit snapshot
 

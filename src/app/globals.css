@@ -416,11 +416,13 @@ body {
 }
 
 .prose table {
+  display: block;
+  max-width: 100%;
   width: 100%;
   border-collapse: collapse;
   margin: 1.75em 0;
   font-size: 0.9rem;
-  overflow: hidden;
+  overflow-x: auto;
   border-radius: 8px;
   border: 1px solid var(--border);
 }

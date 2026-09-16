@@ -27,6 +27,7 @@ export default function SearchBar() {
   const [query, setQuery] = useState("");
   const [results, setResults] = useState<SearchResult[]>([]);
   const [loading, setLoading] = useState(false);
+  const [failed, setFailed] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
   const timerRef = useRef<ReturnType<typeof setTimeout>>(undefined);
@@ -46,20 +47,22 @@ export default function SearchBar() {
   }, []);
 
   useEffect(() => {
-    if (query.length < 2) return;
+    if (query.trim().length < 2) return;
+    const controller = new AbortController();
     clearTimeout(timerRef.current);
     timerRef.current = setTimeout(async () => {
       setLoading(true);
       try {
-        const res = await fetch(`/api/search?q=${encodeURIComponent(query)}`);
+        const res = await fetch(`/api/search?q=${encodeURIComponent(query.trim())}`, { signal: controller.signal });
+        if (!res.ok) throw new Error("Search failed");
         const data = await res.json();
-        setResults(data.posts || []);
+        if (!controller.signal.aborted) { setResults(data.posts || []); setFailed(false); }
       } catch {
-        setResults([]);
+        if (!controller.signal.aborted) { setResults([]); setFailed(true); }
       }
-      setLoading(false);
+      if (!controller.signal.aborted) setLoading(false);
     }, 300);
-    return () => clearTimeout(timerRef.current);
+    return () => { clearTimeout(timerRef.current); controller.abort(); };
   }, [query]);
 
   if (!open) {
@@ -108,14 +111,16 @@ export default function SearchBar() {
         <input
           ref={inputRef}
           type="text"
+          aria-label="게시글 검색어"
+          maxLength={200}
+          onKeyDown={(e) => { if (e.key === "Escape") { setOpen(false); setQuery(""); } }}
           value={query}
           onChange={(e) => {
             const nextQuery = e.target.value;
             setQuery(nextQuery);
-            if (nextQuery.length < 2) {
-              setResults([]);
-              setLoading(false);
-            }
+            setResults([]);
+            setFailed(false);
+            setLoading(nextQuery.trim().length >= 2);
           }}
           placeholder="글 제목, 키워드 검색..."
           style={{
@@ -128,6 +133,7 @@ export default function SearchBar() {
           }}
         />
         <button
+          aria-label="검색 닫기"
           onClick={() => { setOpen(false); setQuery(""); setResults([]); }}
           style={{
             background: "none", border: "none", color: "var(--header-muted)",
@@ -138,8 +144,8 @@ export default function SearchBar() {
         </button>
       </div>
 
-      {(results.length > 0 || (query.length >= 2 && !loading)) && (
-        <div style={{
+      {query.trim().length >= 2 && (
+        <div aria-live="polite" style={{
           position: "absolute",
           top: "calc(100% + 8px)",
           right: 0,
@@ -156,6 +162,8 @@ export default function SearchBar() {
             <div style={{ padding: "1.5rem", textAlign: "center", color: "var(--ink-muted)", fontSize: "0.8125rem" }}>
               검색 중...
             </div>
+          ) : failed ? (
+            <div style={{ padding: "1.5rem", color: "var(--ink-muted)" }}>검색에 실패했습니다. 잠시 후 다시 시도해 주세요.</div>
           ) : results.length === 0 ? (
             <div style={{ padding: "1.5rem", textAlign: "center", color: "var(--ink-muted)", fontSize: "0.8125rem" }}>
               &ldquo;{query}&rdquo;에 대한 검색 결과가 없습니다.

@@ -131,6 +131,7 @@ const reviewedPosts = [
 ];
 
 async function main() {
+  throw new Error("Retired: superseded by the 2026-09-16 sitewide review. Use sitewide-review.ts with a fresh snapshot and reviewed manifest.");
   for (const post of reviewedPosts) {
     const result = await pool.query(
       `UPDATE posts

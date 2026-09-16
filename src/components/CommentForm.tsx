@@ -11,8 +11,6 @@ export default function CommentForm({ postId, onCommentAdded }: CommentFormProps
   const [nickname, setNickname] = useState("");
   const [password, setPassword] = useState("");
   const [content, setContent] = useState("");
-  const [captchaToken, setCaptchaToken] = useState("");
-  const [captchaRequired, setCaptchaRequired] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState("");
   const [success, setSuccess] = useState(false);
@@ -35,17 +33,10 @@ export default function CommentForm({ postId, onCommentAdded }: CommentFormProps
           password,
           content,
           website: honeypotRef.current?.value || "",
-          captchaToken: captchaToken || undefined,
         }),
       });
 
       const data = await res.json();
-
-      if (res.status === 429 && data.captcha_required) {
-        setCaptchaRequired(true);
-        setError("요청이 많습니다. hCaptcha를 완료해주세요.");
-        return;
-      }
 
       if (!res.ok) {
         setError(data.error || "댓글 등록에 실패했습니다.");
@@ -55,8 +46,6 @@ export default function CommentForm({ postId, onCommentAdded }: CommentFormProps
       setNickname("");
       setPassword("");
       setContent("");
-      setCaptchaToken("");
-      setCaptchaRequired(false);
       setSuccess(true);
       setTimeout(() => setSuccess(false), 3000);
       if (!data.pendingApproval) onCommentAdded();
@@ -87,6 +76,7 @@ export default function CommentForm({ postId, onCommentAdded }: CommentFormProps
             value={nickname}
             onChange={(e) => setNickname(e.target.value)}
             placeholder="닉네임"
+            aria-label="닉네임"
             maxLength={30}
             required
             className="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
@@ -98,6 +88,10 @@ export default function CommentForm({ postId, onCommentAdded }: CommentFormProps
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             placeholder="비밀번호 (삭제 시 필요)"
+            aria-label="댓글 삭제용 비밀번호 (4자 이상, 72바이트 이내)"
+            minLength={4}
+            maxLength={72}
+            autoComplete="new-password"
             required
             className="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
@@ -108,44 +102,24 @@ export default function CommentForm({ postId, onCommentAdded }: CommentFormProps
         value={content}
         onChange={(e) => setContent(e.target.value)}
         placeholder="댓글을 입력하세요..."
+        aria-label="댓글 내용"
         maxLength={2000}
         required
         rows={3}
         className="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none"
       />
 
-      {captchaRequired && (
-        <div className="p-3 bg-yellow-50 border border-yellow-200 rounded-lg text-sm text-yellow-800">
-          <p className="mb-2">요청이 많아 보안 인증이 필요합니다.</p>
-          {/* hCaptcha 위젯 - 사이트 키 설정 후 활성화 */}
-          <div
-            className="h-captcha"
-            data-sitekey={process.env.NEXT_PUBLIC_HCAPTCHA_SITE_KEY}
-            data-callback={(token: string) => setCaptchaToken(token)}
-          />
-          {/* 개발환경 테스트용 */}
-          {process.env.NEXT_PUBLIC_HCAPTCHA_SITE_KEY === "10000000-ffff-ffff-ffff-000000000001" && (
-            <button
-              type="button"
-              onClick={() => setCaptchaToken("dev-test-token")}
-              className="mt-2 text-xs text-blue-600 underline"
-            >
-              [개발] 캡차 우회
-            </button>
-          )}
-        </div>
-      )}
-
       {error && (
-        <p className="text-sm text-red-600">{error}</p>
+        <p role="alert" className="text-sm text-red-600">{error}</p>
       )}
 
       {success && (
-        <p className="text-sm text-green-600">
+        <p role="status" className="text-sm text-green-600">
           댓글이 접수되었습니다. 운영자 확인 후 공개됩니다.
         </p>
       )}
 
+      <p className="text-xs text-gray-500">댓글은 검토 후 공개됩니다. 개인정보·기밀은 입력하지 마세요. 삭제용 비밀번호는 4자 이상, 72바이트 이내입니다. <a href="/privacy" className="underline">개인정보 안내</a></p>
       <div className="flex justify-end">
         <button
           type="submit"

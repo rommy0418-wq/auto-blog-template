@@ -1,0 +1,233 @@
+[
+  {
+    "slug": "tools-001",
+    "title": "ChatGPT 업무 초안 입문 — 자료 밖의 답을 찾는 검수 연습",
+    "meta": "ChatGPT에 업무를 요청하기 전 입력 범위와 출력 기준을 정합니다. 가상 안내문 요약에서 날짜·조건·미확인을 점검하는 실습입니다.",
+    "keywords": "tools,AI업무검수,ChatGPT 업무 초안 입문",
+    "file": "scripts/editorial/reviewed-tools/tools-001.html"
+  },
+  {
+    "slug": "tools-002",
+    "title": "Claude 문서 검토 실습 — 요약의 근거와 미확인 항목 구분",
+    "meta": "Claude가 다른 도구보다 항상 우수하다고 단정하지 않습니다. 가상 문서의 변경·충돌·누락을 같은 기준으로 검수하는 방법입니다.",
+    "keywords": "tools,AI업무검수,Claude 문서 검토 실습",
+    "file": "scripts/editorial/reviewed-tools/tools-002.html"
+  },
+  {
+    "slug": "tools-003",
+    "title": "Notion AI 보고서 초안 — 원문 페이지와 상태를 대조하기",
+    "meta": "보고서 완성 시간 보장 대신 원문 상태·근거·공유 범위를 검수합니다. 가상 프로젝트 기록을 보고서로 바꾸는 점검안입니다.",
+    "keywords": "tools,AI업무검수,Notion AI 보고서 초안",
+    "file": "scripts/editorial/reviewed-tools/tools-003.html"
+  },
+  {
+    "slug": "tools-004",
+    "title": "Microsoft 365 Copilot 검토 — 계정 권한과 업무별 시험 분리",
+    "meta": "오피스 AI 기능을 전사에 켜기 전 자료 권한·계정 조건과 검수 기준을 확인합니다. 문서·메일·표의 가상 시험 항목입니다.",
+    "keywords": "tools,AI업무검수,Microsoft 365 Copilot 검토",
+    "file": "scripts/editorial/reviewed-tools/tools-004.html"
+  },
+  {
+    "slug": "tools-005",
+    "title": "Canva AI 디자인 초안 — 외주비 절감보다 납품 품질 확인하기",
+    "meta": "디자인 비용 절감률을 약속하지 않습니다. 가상 행사 포스터의 텍스트·브랜드·권리·내보내기 품질을 검수하는 방법입니다.",
+    "keywords": "tools,AI업무검수,Canva AI 디자인 초안",
+    "file": "scripts/editorial/reviewed-tools/tools-005.html"
+  },
+  {
+    "slug": "tools-006",
+    "title": "Clova Note·Fireflies 검토 — 회의 기록의 전사·요약·이관 비교",
+    "meta": "회의록 도구의 승자를 단정하지 않고 같은 가상 자료로 비교합니다. 화자·숫자·확정 상태·보관 조건과 검수 시간을 확인합니다.",
+    "keywords": "tools,AI업무검수,Clova Note·Fireflies 검토",
+    "file": "scripts/editorial/reviewed-tools/tools-006.html"
+  },
+  {
+    "slug": "tools-007",
+    "title": "DeepL·Papago·ChatGPT 번역 비교 — 의미 보존을 판정하는 표",
+    "meta": "번역 도구의 일반 순위 대신 업무 문장의 숫자·부정·조건·용어를 비교합니다. 가상 납기 안내와 검수 기록 양식입니다.",
+    "keywords": "tools,AI업무검수,DeepL·Papago·ChatGPT 번역 비교",
+    "file": "scripts/editorial/reviewed-tools/tools-007.html"
+  },
+  {
+    "slug": "tools-008",
+    "title": "AI로 엑셀 작업 준비 — 수식보다 데이터 뜻과 검산 먼저",
+    "meta": "AI가 제안한 수식과 집계를 원자료로 검산합니다. 가상 매출표에서 금액·수량·결측값을 구분하고 원본을 보호하는 방법입니다.",
+    "keywords": "tools,AI업무검수,AI로 엑셀 작업 준비",
+    "file": "scripts/editorial/reviewed-tools/tools-008.html"
+  },
+  {
+    "slug": "tools-009",
+    "title": "업무별 AI 도구 선택표 — 기능·자료·검수·운영 조건 비교",
+    "meta": "업종 이름만으로 도구를 추천하지 않습니다. 문서·이미지·분석·자동화 과제의 필수 조건과 같은 입력의 평가표를 만드는 방법입니다.",
+    "keywords": "tools,AI업무검수,업무별 AI 도구 선택표",
+    "file": "scripts/editorial/reviewed-tools/tools-009.html"
+  },
+  {
+    "slug": "tools-010",
+    "title": "Google Workspace AI 시험 — Gmail·Docs·Sheets의 검수 기준",
+    "meta": "워크스페이스 AI 기능을 사용하기 전 계정과 자료 권한을 확인합니다. 메일·문서·표의 서로 다른 실패 조건을 가상 예제로 시험합니다.",
+    "keywords": "tools,AI업무검수,Google Workspace AI 시험",
+    "file": "scripts/editorial/reviewed-tools/tools-010.html"
+  },
+  {
+    "slug": "tools-011",
+    "title": "프롬프트 개선 실험 — 한 번에 하나씩 바꾸고 실패를 비교하기",
+    "meta": "품질 10배 보장 대신 프롬프트 변경을 같은 입력으로 검증합니다. 기준선, 보류 응답, 고정 시험 자료와 새 자료를 나누는 방법입니다.",
+    "keywords": "tools,AI업무검수,프롬프트 개선 실험",
+    "file": "scripts/editorial/reviewed-tools/tools-011.html"
+  },
+  {
+    "slug": "tools-012",
+    "title": "OpenAI API 자동화 설계 — 키·출력 검증·실패 처리를 먼저",
+    "meta": "코딩 없이 된다는 약속 대신 API 자동화의 입력·응답·보안·비용 경계를 설명합니다. 가상 문의 분류 흐름과 중복 실행 점검입니다.",
+    "keywords": "tools,AI업무검수,OpenAI API 자동화 설계",
+    "file": "scripts/editorial/reviewed-tools/tools-012.html"
+  },
+  {
+    "slug": "tools-013",
+    "title": "n8n·Make·Zapier 검토 — 트리거와 중복 실행부터 시험하기",
+    "meta": "자동화 도구의 기능 개수보다 실제 업무의 입력·권한·재시도·기록을 비교합니다. 가상 접수 업무로 실행 경계를 나누는 방법입니다.",
+    "keywords": "tools,AI업무검수,n8n·Make·Zapier 검토",
+    "file": "scripts/editorial/reviewed-tools/tools-013.html"
+  },
+  {
+    "slug": "tools-014",
+    "title": "회사 문서 RAG 설계 — 검색 근거와 접근 권한을 따로 검증하기",
+    "meta": "문서를 연결하면 정답이 보장된다는 오해를 줄입니다. RAG의 문서 선정·검색·답변·권한과 실패 질문을 가상 FAQ로 설명합니다.",
+    "keywords": "tools,AI업무검수,회사 문서 RAG 설계",
+    "file": "scripts/editorial/reviewed-tools/tools-014.html"
+  },
+  {
+    "slug": "tools-015",
+    "title": "AI 이미지 생성 도구 비교 — 결과물의 용도와 수정 가능성 먼저",
+    "meta": "이미지 모델의 순위 대신 작업 요구와 검수표를 만듭니다. 제품 왜곡·문자·권리·해상도와 재작업을 같은 조건으로 비교합니다.",
+    "keywords": "tools,AI업무검수,AI 이미지 생성 도구 비교",
+    "file": "scripts/editorial/reviewed-tools/tools-015.html"
+  },
+  {
+    "slug": "tools-016",
+    "title": "AI 영상 도구 검토 — 장면 생성·발표자·편집 요구 나누기",
+    "meta": "Sora·Runway·HeyGen의 기능·요금을 단정하지 않고 실제 과제 기준으로 비교합니다. 영상 일관성·자막·권리·수정 비용 검수안입니다.",
+    "keywords": "tools,AI업무검수,AI 영상 도구 검토",
+    "file": "scripts/editorial/reviewed-tools/tools-016.html"
+  },
+  {
+    "slug": "tools-017",
+    "title": "AI 음성 합성 검수 — 발음·의미·허락을 함께 확인하기",
+    "meta": "나레이션과 고객 응대의 다른 위험을 구분합니다. 가상 안내문에서 숫자·부정 표현·합성 표시·오류 대응을 점검하는 방법입니다.",
+    "keywords": "tools,AI업무검수,AI 음성 합성 검수",
+    "file": "scripts/editorial/reviewed-tools/tools-017.html"
+  },
+  {
+    "slug": "tools-018",
+    "title": "Cursor·Copilot 비개발자 사용 — 변경 범위와 테스트를 먼저 정하기",
+    "meta": "코드 생성이 동작 보장을 뜻하지 않습니다. 가상 입력 검사 수정으로 요구사항·변경 검토·테스트·복구를 이해하는 입문 가이드입니다.",
+    "keywords": "tools,AI업무검수,Cursor·Copilot 비개발자 사용",
+    "file": "scripts/editorial/reviewed-tools/tools-018.html"
+  },
+  {
+    "slug": "tools-019",
+    "title": "AI 데이터 분석 요청 — 분모·기간·결측을 먼저 설명하기",
+    "meta": "도구를 몰라도 질문은 명확히 해야 합니다. 가상 주문표로 평균·합계·취소·결측을 구분하고 분석 결과를 검산하는 방법입니다.",
+    "keywords": "tools,AI업무검수,AI 데이터 분석 요청",
+    "file": "scripts/editorial/reviewed-tools/tools-019.html"
+  },
+  {
+    "slug": "tools-020",
+    "title": "AI 문서 요약 검수 — 계약·보고서의 조건과 누락을 찾기",
+    "meta": "처리 속도 배수 대신 요약의 범위와 중요한 누락을 검수합니다. 가상 계약 조건에서 본문·예외·부록의 충돌을 확인하는 방법입니다.",
+    "keywords": "tools,AI업무검수,AI 문서 요약 검수",
+    "file": "scripts/editorial/reviewed-tools/tools-020.html"
+  },
+  {
+    "slug": "tools-021",
+    "title": "노코드 AI 챗봇 준비 — 답할 범위와 운영자 이관을 시험하기",
+    "meta": "설치만으로 고객센터가 완성된다는 약속을 피합니다. 가상 FAQ, 답변 보류, 권한과 오류 화면을 점검하는 도입 준비표입니다.",
+    "keywords": "tools,AI업무검수,노코드 AI 챗봇 준비",
+    "file": "scripts/editorial/reviewed-tools/tools-021.html"
+  },
+  {
+    "slug": "tools-022",
+    "title": "Perplexity로 조사 준비 — 답변에서 원문으로 되돌아가기",
+    "meta": "조사 속도 배수 대신 출처의 날짜·범위·직접 근거를 확인합니다. 가상 시장 조사 질문을 주장 장부로 바꾸는 방법입니다.",
+    "keywords": "tools,AI업무검수,Perplexity로 조사 준비",
+    "file": "scripts/editorial/reviewed-tools/tools-022.html"
+  },
+  {
+    "slug": "tools-023",
+    "title": "Bubble·Glide AI 앱 검토 — 화면보다 데이터와 접근 통제 먼저",
+    "meta": "노코드 앱의 화면 완성과 운영 준비를 구분합니다. 가상 문의 앱으로 사용자 분리·입력 검사·실패 화면·복구를 점검합니다.",
+    "keywords": "tools,AI업무검수,Bubble·Glide AI 앱 검토",
+    "file": "scripts/editorial/reviewed-tools/tools-023.html"
+  },
+  {
+    "slug": "tools-024",
+    "title": "n8n 업무 흐름 검수 — 중간 실패와 재실행을 설계하기",
+    "meta": "워크플로우 성공 화면만으로 완료를 판단하지 않습니다. 요청 식별자·상태 전이·중복·오류 알림과 복구를 가상 접수 흐름으로 설명합니다.",
+    "keywords": "tools,AI업무검수,n8n 업무 흐름 검수",
+    "file": "scripts/editorial/reviewed-tools/tools-024.html"
+  },
+  {
+    "slug": "tools-025",
+    "title": "AI 번역·현지화 작업 흐름 — 용어표와 버전을 연결하기",
+    "meta": "해외용 콘텐츠의 언어 변환과 현지 조건 검토를 구분합니다. 가상 서비스 안내의 통화·날짜·지원 범위와 변경 이력 관리 방법입니다.",
+    "keywords": "tools,AI업무검수,AI 번역·현지화 작업 흐름",
+    "file": "scripts/editorial/reviewed-tools/tools-025.html"
+  },
+  {
+    "slug": "tools-026",
+    "title": "업무용 LLM 선택 — 대표 과제와 실패 비용으로 비교하기",
+    "meta": "최신 모델 이름보다 입력·출력·비용·데이터 조건과 평가 자료를 정합니다. 가상 문서 추출 과제에서 의미 오류와 형식 오류를 구분합니다.",
+    "keywords": "tools,AI업무검수,업무용 LLM 선택",
+    "file": "scripts/editorial/reviewed-tools/tools-026.html"
+  },
+  {
+    "slug": "tools-027",
+    "title": "멀티 에이전트 설계 검토 — 역할 분리보다 인수인계 계약 먼저",
+    "meta": "에이전트 수가 많다고 품질이 좋아지는 것은 아닙니다. 가상 조사·작성·검수 흐름의 입력 계약, 권한, 오류 전파와 중단 기준입니다.",
+    "keywords": "tools,AI업무검수,멀티 에이전트 설계 검토",
+    "file": "scripts/editorial/reviewed-tools/tools-027.html"
+  },
+  {
+    "slug": "tools-028",
+    "title": "기업 AI 파이프라인 준비 — 연결 전에 입력 계약과 운영 책임 정하기",
+    "meta": "엔지니어가 필요 없다는 약속 대신 업무 흐름의 자료·검증·권한·실패 처리를 정리합니다. 가상 보고서 생성 파이프라인의 인수 조건입니다.",
+    "keywords": "tools,AI업무검수,기업 AI 파이프라인 준비",
+    "file": "scripts/editorial/reviewed-tools/tools-028.html"
+  },
+  {
+    "slug": "tools-029",
+    "title": "AI 아바타 영상 — 인물 허락·대본·합성 표시를 함께 검수하기",
+    "meta": "아바타가 실제 발언이나 추천처럼 오해되지 않도록 설계합니다. 가상 서비스 안내의 대본, 음성, 화면과 사용 권한 점검입니다.",
+    "keywords": "tools,AI업무검수,AI 아바타 영상",
+    "file": "scripts/editorial/reviewed-tools/tools-029.html"
+  },
+  {
+    "slug": "tools-030",
+    "title": "AI 대시보드 설명 검수 — 지표 정의와 새로고침 실패를 먼저",
+    "meta": "비즈니스 대시보드의 차트와 AI 해석을 원자료에 연결합니다. 가상 매출 지표의 기간·취소·누락·갱신 상태를 점검합니다.",
+    "keywords": "tools,AI업무검수,AI 대시보드 설명 검수",
+    "file": "scripts/editorial/reviewed-tools/tools-030.html"
+  },
+  {
+    "slug": "tools-031",
+    "title": "멀티모달 AI 검수 — 이미지·음성·문서의 불일치를 찾기",
+    "meta": "서로 다른 자료를 한 번에 넣을 때의 출처와 충돌을 관리합니다. 가상 상품 사진·설명·음성 메모의 통합 검수 기준입니다.",
+    "keywords": "tools,AI업무검수,멀티모달 AI 검수",
+    "file": "scripts/editorial/reviewed-tools/tools-031.html"
+  },
+  {
+    "slug": "tools-032",
+    "title": "AI 검색 노출 점검 — 특별한 비법보다 확인 가능한 페이지 만들기",
+    "meta": "AISO라는 이름으로 노출을 보장하지 않습니다. 검색 접근성, 명확한 답, 근거와 실제 인용·유입 관찰을 구분하는 점검안입니다.",
+    "keywords": "tools,AI업무검수,AI 검색 노출 점검",
+    "file": "scripts/editorial/reviewed-tools/tools-032.html"
+  },
+  {
+    "slug": "tools-033",
+    "title": "AI 수요·매출 예측 검증 — 기준 예측과 미래 정보 분리하기",
+    "meta": "예측을 자동 주문으로 연결하기 전 시간 순서·기준선·오차를 확인합니다. 가상 판매 자료의 간단한 검산과 운영 판단의 경계입니다.",
+    "keywords": "tools,AI업무검수,AI 수요·매출 예측 검증",
+    "file": "scripts/editorial/reviewed-tools/tools-033.html"
+  }
+]

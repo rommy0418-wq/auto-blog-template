@@ -32,6 +32,11 @@ export async function generateMetadata({ searchParams }: { searchParams: SearchP
   const currentPage = Number(page);
   const valid = Number.isSafeInteger(currentPage) && currentPage > 0 &&
     (!category || categories.some((item) => item.key === category));
+  if (!valid) notFound();
+  if (currentPage > 1) {
+    const { rows } = await pool.query(`SELECT COUNT(*) AS total FROM posts WHERE status = 'published'${category ? ' AND category = $1' : ''}`, category ? [category] : []);
+    if (currentPage > Math.max(1, Math.ceil(Number(rows[0].total) / LIMIT))) notFound();
+  }
   const params = new URLSearchParams();
   if (category) params.set("category", category);
   if (currentPage > 1) params.set("page", String(currentPage));
@@ -82,7 +87,7 @@ export default async function HomePage({ searchParams }: { searchParams: SearchP
       {/* ── 헤더 ──────────────────────────────────── */}
       <header style={{ background: "var(--header-bg)" }}>
         <div style={{ maxWidth: "56rem", margin: "0 auto", padding: "2rem 1.5rem 1.75rem" }}>
-          <div style={{ display: "flex", alignItems: "flex-end", justifyContent: "space-between", gap: "1rem" }}>
+          <div style={{ display: "flex", flexWrap: "wrap", alignItems: "flex-end", justifyContent: "space-between", gap: "1rem" }}>
             <div>
               <div style={{
                 fontSize: "0.6875rem",
@@ -114,10 +119,10 @@ export default async function HomePage({ searchParams }: { searchParams: SearchP
                 marginTop: "0.5rem",
                 letterSpacing: "0.02em",
               }}>
-                30여년 현장 경험을 바탕으로 한 기업 AI 전환 전략과 실전 가이드
+                기업과 1인 사업자를 위한 AI 업무 설계와 검수 가이드
               </p>
             </div>
-            <nav style={{ display: "flex", alignItems: "center", gap: "var(--space-md)" }}>
+            <nav style={{ display: "flex", flexWrap: "wrap", alignItems: "center", gap: "var(--space-md)" }}>
               <Link href="/about" style={{ fontSize: "0.75rem", color: "var(--header-muted)", textDecoration: "none" }}>소개</Link>
               <Link href="/contact" style={{ fontSize: "0.75rem", color: "var(--header-muted)", textDecoration: "none" }}>문의</Link>
               <Link href="/contents" style={{ fontSize: "0.75rem", color: "var(--header-muted)", textDecoration: "none" }}>전체 목차</Link>

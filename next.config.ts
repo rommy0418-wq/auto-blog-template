@@ -1,6 +1,8 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
+  // Resolve existence/canonical metadata before the response headers are sent.
+  htmlLimitedBots: /.*/,
   async redirects() {
     return [
       {
@@ -15,11 +17,7 @@ const nextConfig: NextConfig = {
     remotePatterns: [
       {
         protocol: "https",
-        hostname: "**",
-      },
-      {
-        protocol: "http",
-        hostname: "**",
+        hostname: "images.unsplash.com",
       },
     ],
   },

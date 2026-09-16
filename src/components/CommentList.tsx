@@ -18,6 +18,7 @@ interface CommentListProps {
 export default function CommentList({ postId, refreshKey }: CommentListProps) {
   const [comments, setComments] = useState<Comment[]>([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
 
   const fetchComments = useCallback(async () => {
     try {
@@ -25,9 +26,10 @@ export default function CommentList({ postId, refreshKey }: CommentListProps) {
       if (res.ok) {
         const data = await res.json();
         setComments(data);
-      }
+        setError("");
+      } else setError("댓글을 불러오지 못했습니다. 잠시 후 다시 확인해 주세요.");
     } catch {
-      // 무시
+      setError("댓글 연결에 실패했습니다. 네트워크를 확인해 주세요.");
     } finally {
       setLoading(false);
     }
@@ -41,6 +43,7 @@ export default function CommentList({ postId, refreshKey }: CommentListProps) {
     const password = window.prompt("댓글 삭제를 위해 비밀번호를 입력하세요:");
     if (!password) return;
 
+    try {
     const res = await fetch(`/api/comments/${commentId}`, {
       method: "DELETE",
       headers: { "Content-Type": "application/json" },
@@ -51,13 +54,16 @@ export default function CommentList({ postId, refreshKey }: CommentListProps) {
       setComments((prev) => prev.filter((c) => c.id !== commentId));
     } else {
       const data = await res.json();
-      alert(data.error === "Wrong password" ? "비밀번호가 틀렸습니다." : "삭제에 실패했습니다.");
+      alert(data.error === "Wrong password" ? "비밀번호가 틀렸습니다." : (data.error || "삭제에 실패했습니다."));
     }
+    } catch { setError("삭제 요청에 실패했습니다. 네트워크를 확인해 주세요."); }
   };
 
   if (loading) {
     return <div className="text-sm text-gray-400 py-4">댓글 불러오는 중...</div>;
   }
+
+  if (error) return <div role="alert" className="text-sm py-4">{error} <button type="button" onClick={fetchComments} className="underline">다시 불러오기</button></div>;
 
   if (comments.length === 0) {
     return (

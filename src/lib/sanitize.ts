@@ -34,6 +34,7 @@ export function sanitizePostHtml(html: string): string {
       figcaption: ["style"],
       th: ["colspan", "rowspan", "scope"],
       td: ["colspan", "rowspan"],
+      ol: ["start"],
     },
     allowedSchemes: ["http", "https", "mailto"],
     allowedSchemesByTag: {

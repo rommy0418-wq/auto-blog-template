@@ -7,6 +7,7 @@ import dotenv from "dotenv";
 
 dotenv.config({ path: ".env.local", quiet: true });
 async function main() {
+  throw new Error("Retired: business-017 was replaced by the sitewide review. Use sitewide-review.ts.");
   const pool = new Pool({ connectionString: process.env.DATABASE_URL });
   try {
     const { rows } = await pool.query("SELECT * FROM posts WHERE id = 144 AND slug = 'business-017' AND status = 'published'");

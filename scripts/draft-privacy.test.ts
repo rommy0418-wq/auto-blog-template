@@ -40,8 +40,8 @@ test("post API keeps drafts private and admin previews out of view counts", asyn
     queries.length = 0;
     const publicPost = await GET(request(), params);
     assert.equal(publicPost.status, 200);
-    assert.equal(queries.length, 2);
-    assert.match(queries[1], /^UPDATE posts SET view_count/);
+    assert.equal(queries.length, 1);
+    assert.equal(queries.some(q => /^UPDATE posts SET view_count/.test(q)), false);
   } finally {
     pool.query = originalQuery;
     if (originalKey === undefined) delete process.env.ADMIN_API_KEY;

@@ -11,7 +11,7 @@ export default function PostShareButton({ slug, title }: PostShareButtonProps) {
   const [open, setOpen] = useState(false);
   const [copied, setCopied] = useState(false);
 
-  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "";
+  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://aitrans-lab.com";
   const postUrl = `${siteUrl}/posts/${slug}`;
 
   const handleCopy = async (e: React.MouseEvent) => {
@@ -138,7 +138,7 @@ export default function PostShareButton({ slug, title }: PostShareButtonProps) {
               <svg width="14" height="14" viewBox="0 0 24 24" fill="#3C1E1E">
                 <path d="M12 3C6.477 3 2 6.477 2 10.8c0 2.74 1.63 5.16 4.1 6.66l-.9 3.37c-.06.24.21.43.42.3L9.8 18.8C10.5 18.93 11.24 19 12 19c5.523 0 10-3.477 10-8s-4.477-8-10-8z"/>
               </svg>
-              카카오톡
+              카카오스토리
             </button>
 
             <button

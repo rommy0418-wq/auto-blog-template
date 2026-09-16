@@ -66,8 +66,8 @@ export async function generateStaticParams() {
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
   const post = await getPost(slug);
-  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000";
-  if (!post) return { title: "글을 찾을 수 없습니다" };
+  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://aitrans-lab.com";
+  if (!post) notFound();
   return {
     title: post.title,
     description: post.meta_description || post.title,
@@ -115,7 +115,6 @@ export default async function PostPage({ params }: Props) {
   const post = await getPost(slug);
   if (!post) notFound();
 
-  await pool.query("UPDATE posts SET view_count = view_count + 1 WHERE id = $1", [post.id]);
   const [likeCount, relatedPosts] = await Promise.all([
     getLikeCount(post.id),
     getRelatedPosts(post.id, post.category),
@@ -155,7 +154,7 @@ export default async function PostPage({ params }: Props) {
           <div style={{
             maxWidth: "52rem", margin: "0 auto",
             padding: "0.875rem 1.5rem",
-            display: "flex", alignItems: "center", justifyContent: "space-between",
+            display: "flex", flexWrap: "wrap", gap: "0.75rem", alignItems: "center", justifyContent: "space-between",
           }}>
             <Link href="/" style={{
               fontFamily: "var(--font-serif)",
@@ -197,7 +196,7 @@ export default async function PostPage({ params }: Props) {
             borderRadius: "0 0 16px 16px",
             border: "1px solid var(--border)",
             borderTop: "none",
-            padding: "2.5rem 2.5rem 3rem",
+            padding: "clamp(1rem, 4vw, 2.5rem)",
             marginBottom: "2rem",
             boxShadow: "0 2px 12px rgba(0,0,0,0.06)",
           }}>
@@ -220,9 +219,6 @@ export default async function PostPage({ params }: Props) {
               )}
               <span style={{ fontSize: "0.75rem", color: "var(--ink-faint)" }}>
                 · {readingMinutes}분 읽기
-              </span>
-              <span style={{ fontSize: "0.75rem", color: "var(--ink-faint)" }}>
-                · 조회 {post.view_count.toLocaleString()}
               </span>
             </div>
 

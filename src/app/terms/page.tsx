@@ -10,7 +10,6 @@ export const metadata: Metadata = {
 export default function TermsPage() {
   const siteName = process.env.NEXT_PUBLIC_SITE_NAME || "AI전환연구소";
   const contactEmail = process.env.NEXT_PUBLIC_CONTACT_EMAIL || "ybkim@ipgroup.co.kr";
-  const today = new Date().toLocaleDateString("ko-KR", { year: "numeric", month: "long", day: "numeric" });
 
   return (
     <div style={{ background: "var(--bg)", minHeight: "100vh" }}>
@@ -46,7 +45,7 @@ export default function TermsPage() {
           이용약관
         </h1>
         <p style={{ fontSize: "0.875rem", color: "var(--ink-faint)", marginBottom: "3rem" }}>
-          시행일: 2026년 1월 1일 &nbsp;|&nbsp; 최종 수정: {today}
+          최종 수정: 2026년 9월 16일
         </p>
 
         <div className="prose" style={{ fontSize: "0.9375rem", lineHeight: 1.85 }}>
@@ -67,12 +66,12 @@ export default function TermsPage() {
 
           <h2>3. 콘텐츠 저작권</h2>
           <p>
-            본 사이트에 게시된 글, 이미지, 디자인 등 모든 콘텐츠의 저작권은 {siteName}에 있습니다.
+            본 사이트가 직접 작성·편집한 콘텐츠의 이용 문의는 운영자에게 연락해 주세요. 제3자 자료·이미지·상표의 권리는 각 권리자에게 있으며, AI 산출물 전체에 대한 독점적 저작권을 주장하지 않습니다.
           </p>
           <ul>
-            <li>콘텐츠의 무단 복제, 배포, 전송, 2차 가공은 금지됩니다.</li>
-            <li>비상업적 목적의 공유는 출처를 명시하는 조건으로 허용됩니다.</li>
-            <li>이미지는 Unsplash 라이선스에 따라 사용되며, 각 이미지에 출처가 표기되어 있습니다.</li>
+            <li>게시글 링크 공유를 환영합니다. 본문 전체의 재게시나 상업적 재사용은 먼저 문의해 주세요.</li>
+            <li>법령상 허용되는 인용 등의 이용은 해당 요건에 따릅니다.</li>
+            <li>외부 이미지와 자료를 재사용할 때에는 원출처의 이용 조건을 별도로 확인해야 합니다.</li>
           </ul>
 
           <h2>4. AI 생성 콘텐츠 면책</h2>
@@ -81,7 +80,7 @@ export default function TermsPage() {
             AI 생성 콘텐츠에 대해 다음 사항을 안내드립니다.
           </p>
           <ul>
-            <li>AI가 생성한 내용은 참고 자료로만 활용하시기 바라며, 전문적인 의사결정에 대한 책임은 이용자 본인에게 있습니다.</li>
+            <li>AI가 생성·편집한 내용은 참고 자료이며, 가상 예시는 실제 고객 성과나 운영자의 수행 실적이 아닙니다.</li>
             <li>AI의 특성상 부정확하거나 오래된 정보가 포함될 수 있습니다. 중요한 사안은 반드시 전문가와 상담하시기 바랍니다.</li>
             <li>본 사이트는 AI 생성 콘텐츠의 정확성, 완전성, 적시성을 보장하지 않습니다.</li>
             <li>콘텐츠에서 언급되는 특정 도구, 서비스, 기업 정보는 작성 시점 기준이며 변경되었을 수 있습니다.</li>
@@ -96,9 +95,9 @@ export default function TermsPage() {
 
           <h2>6. 면책 조항</h2>
           <ul>
-            <li>본 사이트는 천재지변, 서버 장애 등 불가항력으로 인한 서비스 중단에 대해 책임을 지지 않습니다.</li>
-            <li>이용자가 본 사이트의 콘텐츠를 기반으로 내린 결정에 대해 본 사이트는 책임을 지지 않습니다.</li>
-            <li>외부 링크를 통해 이동한 사이트의 콘텐츠 및 서비스에 대해 본 사이트는 책임을 지지 않습니다.</li>
+            <li>서비스는 점검이나 장애로 일시 중단될 수 있습니다. 운영자는 확인된 오류와 장애를 수정하기 위해 노력합니다.</li>
+            <li>콘텐츠는 개별 상황에 대한 법률·세무·투자 등 전문 자문을 대신하지 않습니다.</li>
+            <li>외부 사이트는 해당 운영자의 정책에 따릅니다. 본 안내가 관련 법령상 배제할 수 없는 책임이나 이용자의 권리를 제한하지는 않습니다.</li>
           </ul>
 
           <h2>7. 광고 게재</h2>

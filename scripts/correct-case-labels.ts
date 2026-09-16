@@ -10,6 +10,9 @@ const changes = [
   { slug: "cases-019", title: "건설회사 AI 문서 자동화 — 보고서 초안 시험 운영 가이드", meta: "실제 고객 사례가 아닌 문서 자동화 설계 예시. 현장 메모 입력 양식, 보고서 초안 프롬프트, 원문 대조 기준과 자동화 중단 조건을 제공합니다." },
 ];
 async function main() {
+  if (!process.argv.includes("--historical-migration-do-not-use")) {
+    throw new Error("Retired: all case articles were rewritten. Do not restore the earlier labels.");
+  }
   if (!process.env.ADMIN_API_KEY) throw new Error("Cache refresh credential missing");
   const pool = new Pool({ connectionString: process.env.DATABASE_URL });
   const client = await pool.connect();

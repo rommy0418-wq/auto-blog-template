@@ -3,14 +3,15 @@ import bcrypt from "bcryptjs";
 import pool from "@/lib/db";
 import { sha256 } from "@/lib/hash";
 import { getClientIp } from "@/lib/seo";
-import { checkHoneypot, checkRateLimit, verifyCaptcha, logSpam } from "@/lib/spam";
+import { checkHoneypot, checkRateLimit, logSpam, RATE_WINDOW } from "@/lib/spam";
+import { validComment } from "@/lib/comment-validation";
 
 export async function GET(request: NextRequest) {
   try {
     const { searchParams } = new URL(request.url);
     const postId = Number(searchParams.get("postId"));
 
-    if (!postId || isNaN(postId)) {
+    if (!Number.isSafeInteger(postId) || postId < 1) {
       return NextResponse.json({ error: "postId is required" }, { status: 400 });
     }
 
@@ -32,34 +33,22 @@ export async function GET(request: NextRequest) {
 
 export async function POST(request: NextRequest) {
   try {
-    const body = await request.json();
+    const body = await request.json().catch(() => null);
+    if (!validComment(body)) return NextResponse.json(
+      { error: "닉네임·댓글을 확인하고 비밀번호는 4자 이상, 72바이트 이내로 입력해 주세요." }, { status: 400 }
+    );
     const ip = getClientIp(request);
 
     if (checkHoneypot(body)) {
-      await logSpam(ip, "honeypot", JSON.stringify({ postId: body.postId }));
+      await logSpam(ip, "honeypot");
       return NextResponse.json({ id: 0, success: true });
     }
 
-    const { limited, requireCaptcha } = await checkRateLimit(ip, "comment");
+    const { limited, unavailable } = await checkRateLimit(ip, "comment");
     if (limited) {
-      const captchaToken = body.captchaToken;
-      if (!captchaToken) {
-        return NextResponse.json(
-          { error: "Too many requests", captcha_required: true },
-          { status: 429 }
-        );
-      }
-
-      const captchaOk = await verifyCaptcha(captchaToken);
-      if (!captchaOk) {
-        await logSpam(ip, "captcha_fail", JSON.stringify({ postId: body.postId }));
-        return NextResponse.json(
-          { error: "Captcha verification failed", captcha_required: true },
-          { status: 429 }
-        );
-      }
+      return NextResponse.json({ error: unavailable ? "보안 확인이 일시적으로 불가능합니다. 잠시 후 다시 시도해 주세요." : `요청이 많습니다. ${RATE_WINDOW}초 후 다시 시도해 주세요.` },
+        { status: unavailable ? 503 : 429, headers: { "Retry-After": String(RATE_WINDOW) } });
     }
-    void requireCaptcha;
 
     const { postId, nickname, password, content } = body;
 
@@ -90,7 +79,7 @@ export async function POST(request: NextRequest) {
       `INSERT INTO comments (post_id, nickname, password, content, ip_hash, is_approved)
        VALUES ($1, $2, $3, $4, $5, FALSE)
        RETURNING id`,
-      [postId, nickname, passwordHash, content, ipHash]
+      [postId, nickname.trim(), passwordHash, content.trim(), ipHash]
     );
 
     return NextResponse.json(

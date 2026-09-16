@@ -1,11 +1,12 @@
 import { Post } from "@/types";
+import { jsonForHtml } from "@/lib/serialization";
 
 interface JsonLdProps {
   post: Post;
 }
 
 export default function JsonLd({ post }: JsonLdProps) {
-  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000";
+  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://aitrans-lab.com";
   const siteName = process.env.NEXT_PUBLIC_SITE_NAME || "AI전환연구소";
 
   const schema = {
@@ -33,7 +34,7 @@ export default function JsonLd({ post }: JsonLdProps) {
   return (
     <script
       type="application/ld+json"
-      dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }}
+      dangerouslySetInnerHTML={{ __html: jsonForHtml(schema) }}
     />
   );
 }

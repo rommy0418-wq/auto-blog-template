@@ -12,7 +12,7 @@ const notoSansKR = Noto_Sans_KR({
 });
 
 const siteName = process.env.NEXT_PUBLIC_SITE_NAME || "AI전환연구소";
-const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000";
+const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://aitrans-lab.com";
 
 const googleVerification = process.env.NEXT_PUBLIC_GOOGLE_VERIFICATION;
 const naverVerification = process.env.NEXT_PUBLIC_NAVER_VERIFICATION;
@@ -53,7 +53,8 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const gaId = process.env.NEXT_PUBLIC_GA_ID;
+  const configuredGaId = process.env.NEXT_PUBLIC_GA_ID;
+  const gaId = configuredGaId && /^G-[A-Z0-9]+$/.test(configuredGaId) ? configuredGaId : undefined;
 
   return (
     <html lang="ko" className={`${notoSansKR.variable} h-full`}>

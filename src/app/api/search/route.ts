@@ -6,8 +6,10 @@ export async function GET(request: NextRequest) {
   if (!q || q.length < 2) {
     return NextResponse.json({ posts: [], total: 0 });
   }
+  if (q.length > 200) return NextResponse.json({ error: "Query too long" }, { status: 400 });
 
-  const searchTerm = `%${q}%`;
+  const searchTerm = `%${q.replace(/[\\%_]/g, "\\$&")}%`;
+  try {
   const { rows } = await pool.query(
     `SELECT id, title, slug, category, level, thumbnail_url, meta_description, published_at, view_count
      FROM posts
@@ -21,4 +23,7 @@ export async function GET(request: NextRequest) {
   );
 
   return NextResponse.json({ posts: rows, total: rows.length });
+  } catch {
+    return NextResponse.json({ error: "Search unavailable" }, { status: 503 });
+  }
 }

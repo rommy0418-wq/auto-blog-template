@@ -1,7 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
 import bcrypt from "bcryptjs";
 import pool from "@/lib/db";
-import { verifyAdminKey } from "@/lib/seo";
+import { getClientIp, verifyAdminKey } from "@/lib/seo";
+import { checkRateLimit, RATE_WINDOW } from "@/lib/spam";
 
 export async function DELETE(
   request: NextRequest,
@@ -11,10 +12,16 @@ export async function DELETE(
     const { id } = await params;
     const commentId = Number(id);
 
-    if (isNaN(commentId)) {
+    if (!Number.isSafeInteger(commentId) || commentId < 1) {
       return NextResponse.json({ error: "Invalid id" }, { status: 400 });
     }
 
+    const admin = verifyAdminKey(request);
+    if (!admin) {
+      const { limited, unavailable } = await checkRateLimit(getClientIp(request), "comment-delete");
+      if (limited) return NextResponse.json({ error: "잠시 후 다시 시도해 주세요." },
+        { status: unavailable ? 503 : 429, headers: { "Retry-After": String(RATE_WINDOW) } });
+    }
     const { rows } = await pool.query(
       "SELECT id, password FROM comments WHERE id = $1",
       [commentId]
@@ -25,15 +32,16 @@ export async function DELETE(
       return NextResponse.json({ error: "Not found" }, { status: 404 });
     }
 
-    if (verifyAdminKey(request)) {
+    if (admin) {
       await pool.query("DELETE FROM comments WHERE id = $1", [commentId]);
       return NextResponse.json({ success: true });
     }
 
     const body = await request.json().catch(() => ({}));
-    const { password } = body;
+    const password = body?.password;
 
-    if (!password) {
+    // Existing comments may have short passwords; retain deletion access.
+    if (typeof password !== "string" || !password || Buffer.byteLength(password, "utf8") > 72) {
       return NextResponse.json({ error: "Password required" }, { status: 401 });
     }
 

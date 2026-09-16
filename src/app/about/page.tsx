@@ -2,7 +2,7 @@ import Link from "next/link";
 
 export const metadata = {
   title: "블로그 소개",
-  description: "30여년 현장 경험 기반, 기업 AI 전환 전략과 실전 가이드 — AI전환연구소",
+  description: "기업과 1인 사업자를 위한 AI 업무 설계, 검수 절차와 시험 가이드 — AI전환연구소",
   alternates: { canonical: "/about" },
 };
 
@@ -57,7 +57,7 @@ export default function AboutPage() {
           AI전환연구소
         </h1>
         <p style={{ fontSize: "1.0625rem", color: "var(--ink-mid)", lineHeight: 1.8 }}>
-          30여년 현장 경험을 바탕으로 한 기업 AI 전환 전략과 실전 가이드
+          기업과 1인 사업자를 위한 AI 업무 설계와 검수 가이드
         </p>
       </div>
 
@@ -76,7 +76,7 @@ export default function AboutPage() {
           이 블로그는
         </h2>
         <p style={{ lineHeight: 1.9, color: "var(--ink-mid)", marginBottom: "1rem" }}>
-          <strong style={{ color: "var(--ink)" }}>AI전환연구소</strong>는 30여년간 웹 에이전시를 운영해 온 현장 전문가의 시각으로,
+          <strong style={{ color: "var(--ink)" }}>AI전환연구소</strong>는
           기업과 1인 사업자가 AI를 실제 비즈니스에 적용하는 방법을 다룹니다.
         </p>
         <p style={{ lineHeight: 1.9, color: "var(--ink-mid)" }}>
@@ -101,8 +101,8 @@ export default function AboutPage() {
           {[
             { emoji: "🏢", title: "기업 AI 전환 전략", desc: "단계별 로드맵과 실행 가이드" },
             { emoji: "🛠", title: "AI 도구 실전 활용", desc: "ChatGPT·Claude·Gemini 업무 적용법" },
-            { emoji: "📣", title: "AI 마케팅·광고", desc: "30여년 광고 기획 경험 + AI" },
-            { emoji: "💼", title: "1인 기업·수익화", desc: "혼자서 10명 몫 하는 AI 모델" },
+            { emoji: "📣", title: "AI 마케팅·광고", desc: "콘텐츠 검수와 효과 측정 방법" },
+            { emoji: "💼", title: "1인 기업·수익화", desc: "작은 사업의 업무 설계와 비용 점검" },
             { emoji: "📊", title: "업종별 도입 사례", desc: "공개 사례와 가상 적용 시나리오" },
             { emoji: "🔰", title: "AI 입문·트렌드", desc: "비전문가도 이해하는 AI 기초" },
           ].map(({ emoji, title, desc }) => (
@@ -138,13 +138,12 @@ export default function AboutPage() {
           padding: "1.75rem",
         }}>
           <p style={{ lineHeight: 1.9, color: "var(--ink-mid)", marginBottom: "1rem" }}>
-            웹 에이전시 <strong style={{ color: "var(--ink)" }}>아이피그룹(IPGroup)</strong> 대표로,
-            30여년간 기업 웹 구축, 브랜드 마케팅, 광고 기획 등 다양한 프로젝트를 이끌어 왔습니다.
-            이 경험을 토대로 기업이 AI를 실무에 도입하고 비즈니스를 전환하는 전략을 제시합니다.
+            이 블로그는 <strong style={{ color: "var(--ink)" }}>아이피그룹(IPGroup)</strong> 대표가 운영합니다.
+            운영자의 실명과 프로필 사진은 공개하지 않습니다.
           </p>
           <p style={{ lineHeight: 1.9, color: "var(--ink-mid)", marginBottom: "1.25rem" }}>
-            현재 기업 AI 전환 컨설팅과 AI 기반 비즈니스 모델 설계를 중심으로 활동하며,
-            AI 활용에 관한 정보와 업무 설계 관점을 이 블로그를 통해 공유하고 있습니다.
+            AI 활용에 관한 정보와 업무 설계 관점을 공유합니다.
+            글에 등장하는 예시는 별도 근거가 명시되지 않는 한 실제 고객 프로젝트나 운영자의 실측 성과가 아닙니다.
           </p>
           <a
             href="http://www.ipgroup.co.kr"
@@ -166,7 +165,7 @@ export default function AboutPage() {
 
       <section style={{ marginBottom: "2.5rem", lineHeight: 1.9 }}>
         <h2>콘텐츠를 읽을 때 확인할 점</h2>
-        <p>AI 생성·편집 콘텐츠가 포함되어 있습니다. 기존 글의 근거와 실용 자료를 순차적으로 점검하고 있으며, 모든 글의 사실 검증이 완료된 상태는 아닙니다.</p>
+        <p>AI 생성·편집 콘텐츠가 포함되어 있습니다. 2026년 9월 16일 공개 글 139편을 전수 편집 점검하여 확인되지 않은 성과·가격·체험 주장을 정리했습니다. 가상 예시는 실제 수행 성과가 아니며, 점검이 모든 정보의 정확성이나 최신성을 보증하지는 않습니다.</p>
         <ul>
           <li>가상 사례의 수치와 결과는 실제 고객의 성과가 아닙니다.</li>
           <li>제품 기능과 비용은 연결된 공식 문서에서 적용 조건과 날짜를 확인하세요.</li>

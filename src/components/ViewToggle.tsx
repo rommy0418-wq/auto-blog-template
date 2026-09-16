@@ -14,8 +14,9 @@ export default function ViewToggle({ currentView }: ViewToggleProps) {
   useEffect(() => {
     const urlView = searchParams.get("view");
     if (!urlView) {
-      const saved = localStorage.getItem("preferred-view");
-      if (saved && saved !== "list") {
+      let saved: string | null = null;
+      try { saved = localStorage.getItem("preferred-view"); } catch { /* Storage may be disabled. */ }
+      if (saved === "card") {
         const params = new URLSearchParams(searchParams.toString());
         params.set("view", saved);
         router.replace(`/?${params.toString()}`);
@@ -24,7 +25,7 @@ export default function ViewToggle({ currentView }: ViewToggleProps) {
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   const switchView = (view: string) => {
-    localStorage.setItem("preferred-view", view);
+    try { localStorage.setItem("preferred-view", view); } catch { /* Navigation still works. */ }
     const params = new URLSearchParams(searchParams.toString());
     params.set("view", view);
     params.delete("page");
@@ -36,6 +37,7 @@ export default function ViewToggle({ currentView }: ViewToggleProps) {
       <button
         onClick={() => switchView("list")}
         aria-label="목록형"
+        aria-pressed={currentView === "list"}
         className={`view-btn${currentView === "list" ? " active" : ""}`}
       >
         <svg width="13" height="13" viewBox="0 0 14 14" fill="none">
@@ -48,6 +50,7 @@ export default function ViewToggle({ currentView }: ViewToggleProps) {
       <button
         onClick={() => switchView("card")}
         aria-label="카드형"
+        aria-pressed={currentView === "card"}
         className={`view-btn${currentView === "card" ? " active" : ""}`}
       >
         <svg width="13" height="13" viewBox="0 0 14 14" fill="none">

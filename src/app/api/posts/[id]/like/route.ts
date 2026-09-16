@@ -11,7 +11,7 @@ export async function POST(
     const { id } = await params;
     const postId = Number(id);
 
-    if (isNaN(postId)) {
+    if (!Number.isSafeInteger(postId) || postId < 1) {
       return NextResponse.json({ error: "Invalid id" }, { status: 400 });
     }
 

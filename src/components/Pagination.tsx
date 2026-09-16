@@ -25,7 +25,7 @@ export default function Pagination({ currentPage, totalPages, view, category }: 
   return (
     <nav aria-label="페이지 네비게이션" className="pagination" style={{ marginBottom: "0" }}>
       {currentPage > 1 && (
-        <Link href={buildHref(currentPage - 1)} className="page-btn">
+        <Link href={buildHref(currentPage - 1)} className="page-btn" aria-label="이전 페이지">
           ‹
         </Link>
       )}
@@ -44,6 +44,7 @@ export default function Pagination({ currentPage, totalPages, view, category }: 
           key={page}
           href={buildHref(page)}
           className={`page-btn${page === currentPage ? " active" : ""}`}
+          aria-current={page === currentPage ? "page" : undefined}
         >
           {page}
         </Link>
@@ -59,7 +60,7 @@ export default function Pagination({ currentPage, totalPages, view, category }: 
       )}
 
       {currentPage < totalPages && (
-        <Link href={buildHref(currentPage + 1)} className="page-btn">
+        <Link href={buildHref(currentPage + 1)} className="page-btn" aria-label="다음 페이지">
           ›
         </Link>
       )}

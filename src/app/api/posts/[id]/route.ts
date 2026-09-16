@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { revalidatePath } from "next/cache";
 import pool from "@/lib/db";
 import { verifyAdminKey } from "@/lib/seo";
+import { validPostInput } from "@/lib/post-validation";
 
 export async function GET(
   request: NextRequest,
@@ -10,7 +11,7 @@ export async function GET(
   try {
     const { id } = await params;
     const postId = Number(id);
-    if (isNaN(postId)) {
+    if (!Number.isSafeInteger(postId) || postId < 1) {
       return NextResponse.json({ error: "Invalid id" }, { status: 400 });
     }
 
@@ -25,10 +26,6 @@ export async function GET(
 
     if (!post) {
       return NextResponse.json({ error: "Not found" }, { status: 404 });
-    }
-
-    if (!isAdmin) {
-      await pool.query("UPDATE posts SET view_count = view_count + 1 WHERE id = $1", [postId]);
     }
 
     return NextResponse.json(post, {
@@ -51,11 +48,17 @@ export async function PATCH(
   try {
     const { id } = await params;
     const postId = Number(id);
-    if (isNaN(postId)) {
+    if (!Number.isSafeInteger(postId) || postId < 1) {
       return NextResponse.json({ error: "Invalid id" }, { status: 400 });
     }
 
-    const body = await request.json();
+    const { rows: oldRows } = await pool.query("SELECT slug FROM posts WHERE id = $1", [postId]);
+    if (!oldRows[0]) return NextResponse.json({ error: "Not found" }, { status: 404 });
+    const body = await request.json().catch(() => null);
+    if (!validPostInput(body, true)) return NextResponse.json({ error: "Invalid post fields" }, { status: 400 });
+    if ("slug" in body && body.slug !== oldRows[0].slug) {
+      return NextResponse.json({ error: "Changing an existing URL requires a redirect migration" }, { status: 409 });
+    }
     const allowedFields = ["title", "content", "slug", "category", "thumbnail_url", "meta_description", "keywords", "status", "published_at"];
     const updates: string[] = [];
     const values: unknown[] = [];
@@ -65,6 +68,10 @@ export async function PATCH(
         updates.push(`${field} = $${values.length + 1}`);
         values.push(body[field] ?? null);
       }
+    }
+
+    if (body.status === "published" && !("published_at" in body)) {
+      updates.push("published_at = COALESCE(published_at, NOW())");
     }
 
     if (updates.length === 0) {
@@ -83,6 +90,9 @@ export async function PATCH(
     }
     revalidatePath("/");
     revalidatePath("/contents");
+    revalidatePath(`/posts/${oldRows[0].slug}`);
+    revalidatePath("/feed.xml");
+    revalidatePath("/sitemap.xml");
 
     return NextResponse.json({ success: true });
   } catch (error) {
@@ -102,11 +112,12 @@ export async function DELETE(
   try {
     const { id } = await params;
     const postId = Number(id);
-    if (isNaN(postId)) {
+    if (!Number.isSafeInteger(postId) || postId < 1) {
       return NextResponse.json({ error: "Invalid id" }, { status: 400 });
     }
 
     const { rows } = await pool.query("SELECT slug FROM posts WHERE id = $1", [postId]);
+    if (!rows[0]) return NextResponse.json({ error: "Not found" }, { status: 404 });
     await pool.query("DELETE FROM posts WHERE id = $1", [postId]);
 
     if (rows[0]) {
@@ -114,6 +125,8 @@ export async function DELETE(
     }
     revalidatePath("/");
     revalidatePath("/contents");
+    revalidatePath("/feed.xml");
+    revalidatePath("/sitemap.xml");
 
     return NextResponse.json({ success: true });
   } catch (error) {

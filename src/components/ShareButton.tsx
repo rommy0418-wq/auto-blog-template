@@ -54,14 +54,14 @@ export default function ShareButton({ title }: ShareButtonProps) {
 
       <button
         onClick={handleKakao}
-        aria-label="카카오톡 공유"
+        aria-label="카카오스토리 공유"
         className="btn btn-md"
         style={{ background: "#FEE500", borderColor: "#E6CF00", color: "#3C1E1E" }}
       >
         <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
           <path d="M12 3C6.477 3 2 6.477 2 10.8c0 2.74 1.63 5.16 4.1 6.66l-.9 3.37c-.06.24.21.43.42.3L9.8 18.8C10.5 18.93 11.24 19 12 19c5.523 0 10-3.477 10-8s-4.477-8-10-8z"/>
         </svg>
-        카카오
+        카카오스토리
       </button>
 
       <button

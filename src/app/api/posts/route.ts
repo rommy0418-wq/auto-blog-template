@@ -2,12 +2,17 @@ import { NextRequest, NextResponse } from "next/server";
 import { revalidatePath } from "next/cache";
 import pool from "@/lib/db";
 import { generateSlug, verifyAdminKey } from "@/lib/seo";
+import { validPostInput } from "@/lib/post-validation";
 
 export async function GET(request: NextRequest) {
   try {
     const { searchParams } = new URL(request.url);
-    const page = Math.max(1, Number(searchParams.get("page")) || 1);
-    const limit = Math.min(50, Math.max(1, Number(searchParams.get("limit")) || 10));
+    const page = Number(searchParams.get("page") ?? 1);
+    const limit = Number(searchParams.get("limit") ?? 10);
+    if (!Number.isSafeInteger(page) || page < 1 || page > 1000000 ||
+        !Number.isSafeInteger(limit) || limit < 1 || limit > 50) {
+      return NextResponse.json({ error: "Invalid pagination" }, { status: 400 });
+    }
     const category = searchParams.get("category") || null;
     const offset = (page - 1) * limit;
 
@@ -58,14 +63,15 @@ export async function POST(request: NextRequest) {
   }
 
   try {
-    const body = await request.json();
+    const body = await request.json().catch(() => null);
+    if (!validPostInput(body)) return NextResponse.json({ error: "Invalid post fields" }, { status: 400 });
     const { title, content, slug, category, thumbnail_url, meta_description, keywords, status, published_at } = body;
 
     if (!title || !content) {
       return NextResponse.json({ error: "title and content are required" }, { status: 400 });
     }
 
-    const finalSlug = slug || generateSlug(title);
+    const finalSlug = slug || generateSlug(String(title));
 
     const result = await pool.query(
       `INSERT INTO posts (title, content, slug, category, thumbnail_url, meta_description, keywords, status, published_at)
@@ -80,11 +86,14 @@ export async function POST(request: NextRequest) {
         meta_description || null,
         keywords || null,
         status || "draft",
-        published_at || null,
+        published_at || (status === "published" ? new Date().toISOString() : null),
       ]
     );
 
     revalidatePath("/");
+    revalidatePath("/contents");
+    revalidatePath("/feed.xml");
+    revalidatePath("/sitemap.xml");
     if (status === "published") {
       revalidatePath(`/posts/${finalSlug}`);
     }

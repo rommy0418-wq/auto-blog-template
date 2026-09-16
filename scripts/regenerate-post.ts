@@ -12,6 +12,8 @@ import * as path from "path";
 
 dotenv.config({ path: path.resolve(process.cwd(), ".env.local") });
 
+throw new Error("Retired MySQL public rewrite script. Use reviewed drafts and sitewide-review.ts instead.");
+
 const pool = mysql.createPool({
   host: process.env.DATABASE_HOST || "127.0.0.1",
   port: Number(process.env.DATABASE_PORT) || 3306,

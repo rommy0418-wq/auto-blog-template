@@ -84,12 +84,12 @@ export default function PostCard({ posts }: PostCardProps) {
                 : "";
 
               return (
-                <Link
+                <article
                   key={post.id}
-                  href={`/posts/${post.slug}`}
                   className="post-card"
                   style={{ borderTop: `3px solid ${accent}` }}
                 >
+                  <Link href={`/posts/${post.slug}`} tabIndex={-1} aria-hidden="true">
                   {post.thumbnail_url ? (
                     <div className="post-card-thumb">
                       <Image
@@ -105,6 +105,7 @@ export default function PostCard({ posts }: PostCardProps) {
                       <span style={{ fontSize: "2rem", opacity: 0.4 }}>🏛</span>
                     </div>
                   )}
+                  </Link>
 
                   <div className="post-card-body">
                     <div style={{ display: "flex", gap: "0.35rem", marginBottom: "0.6rem", flexWrap: "wrap" }}>
@@ -112,7 +113,7 @@ export default function PostCard({ posts }: PostCardProps) {
                       {level && <span className={level.cls}>{level.label}</span>}
                     </div>
 
-                    <h2 className="post-card-title">{post.title}</h2>
+                    <h2 className="post-card-title"><Link href={`/posts/${post.slug}`}>{post.title}</Link></h2>
 
                     {post.meta_description && (
                       <p style={{
@@ -134,11 +135,11 @@ export default function PostCard({ posts }: PostCardProps) {
                       fontSize: "0.6875rem", color: "var(--ink-faint)", marginTop: "auto",
                       paddingTop: "0.5rem", borderTop: "1px solid var(--border-light)",
                     }}>
-                      <span>{publishedDate || ""} · 조회 {(post.view_count || 0).toLocaleString()}</span>
+                      <span>{publishedDate || ""}</span>
                       <PostShareButton slug={post.slug || ""} title={post.title || ""} />
                     </div>
                   </div>
-                </Link>
+                </article>
               );
             })}
           </div>
