@@ -1,7 +1,23 @@
-# Sitewide editorial and functional audit — final verification
+# Sitewide editorial and functional audit — completed and deployed
 
 User authorized the entire audit and corrections without per-batch approval.
-Do not report completion until all categories and deployed behavior are checked.
+All categories and the deployed behavior described below have now been checked.
+
+## Release result
+
+- Code/content commit: `3f343d5`, pushed to main; Vercel reported success
+  (Deployment has completed).
+- Production: https://aitrans-lab.com
+- Post-deployment full crawl: **172 pages/internal links, zero errors**.
+- All **139 published bodies** equal the reviewed files. Article titles, correction
+  notices, JSON-LD, canonical metadata and internal anchors checked across all139.
+- Production RSS and sitemap parsed successfully with xmllint; sitemap has139
+  article URLs. Nonexistent article and invalid page numbers return404.
+- Production about/privacy contain the new139-post review statement and accurate
+  password-hash notice. Invalid comment postId returns400; literal-percent search
+  returns200 instead of being treated as an unrestricted wildcard.
+- Published URLs, IDs and dates preserved; no articles bulk deleted/unpublished.
+- No AdSense re-review was submitted. No approval or revenue guarantee.
 
 ## Recovery
 
@@ -91,9 +107,10 @@ script was removed. Continue with direct editorial work; do not bypass the rejec
   article all had scrollWidth=clientWidth=320. Home card screenshot at320px and
   desktop screenshot inspected. Browser console error check returned an empty list.
 
-## Release checks / bounded limitations
+## Bounded limitations and follow-up
 
-- Deployment and post-deployment public crawl are the remaining release gates.
+- Release gates passed: lint,10 regression tests, isolated database integration,
+  build154 pages, local crawl, deployment success, public crawl and browser checks.
 - Privacy wording now describes actual behavior, but legal review and a formal
   provider-specific retention/transfer compliance review are not certified here.
   Existing visitor/security records were not bulk deleted.
