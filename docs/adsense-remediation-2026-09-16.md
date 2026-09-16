@@ -30,6 +30,20 @@ No-source-link counts do not imply that every statement requires a citation.
   This is transparency remediation, not a complete factual audit of those posts.
 - Existing posts are not deleted or bulk unpublished.
 
+## Second editorial pass — cases-017 and cases-018
+
+- Replaced both previously labelled fictional success stories with distinct,
+  actionable test designs: manufacturing visual inspection and customer-support
+  draft-answer review. Removed unsupported before/after performance tables.
+- Added explicit correction notices, scope limits and verified NIST references.
+- Manufacturing guide separates defect misses, false alarms and inconclusive
+  results; customer-support guide includes expected and failing responses.
+- Any numbers retained are clearly labelled arithmetic exercises, not outcomes.
+- Apply through scripts/apply-case-review.ts --apply; default mode only validates
+  the two local articles. Application locks exact targets, checks previous titles,
+  backs up originals, updates atomically, and refreshes article/home caches.
+- This is a two-article pass, not a completed audit of all 139 published posts.
+
 ## Required next steps before re-review
 
 1. Owner approved draft-only generation. Generator now saves draft + NULL publication
