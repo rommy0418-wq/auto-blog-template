@@ -11,8 +11,14 @@ const educationHealth = process.argv.includes("--education-health");
 const productivityClaims = process.argv.includes("--productivity-claims");
 const marketingClaims = process.argv.includes("--marketing-claims");
 const operationsClaims = process.argv.includes("--operations-claims");
-assert.ok([identityClaims, educationHealth, productivityClaims, marketingClaims, operationsClaims].filter(Boolean).length <= 1, "Select only one review batch");
-const changes = (operationsClaims ? [
+const finalCases = process.argv.includes("--final-cases");
+assert.ok([identityClaims, educationHealth, productivityClaims, marketingClaims, operationsClaims, finalCases].filter(Boolean).length <= 1, "Select only one review batch");
+const changes = (finalCases ? [
+  { slug: "cases-010", expectedTitle: "부동산·건설 AI 도입 사례 — 매물 분석부터 계약까지", title: "부동산·건설 AI 문서 검토 — 충돌·누락과 확인 질문 정리", meta: "가상 계약·안전 성과 대신 자료 비교 시험으로 수정했습니다. 원문 버전, 예정·확정 상태, 누락과 충돌을 확인하고 전문 판단과 자동 실행은 제외합니다." },
+  { slug: "cases-011", expectedTitle: "글로벌 AI 트랜스포메이션 트렌드 — 한국 기업 시사점", title: "해외 AI 사례 읽는 법 — 국내 적용 전에 확인할 근거와 조건", meta: "해외 도입 소식과 우리 업무의 효과를 구분하는 자료 검토법. 발표 유형, 측정 범위, 국내 적용 조건과 미확인 사항을 기록하는 방법입니다." },
+  { slug: "cases-012", expectedTitle: "AI 컨설턴트가 되는 법 — 자격·역량·수익화 완전 가이드", title: "AI 컨설팅 역량 보여주기 — 실습 포트폴리오와 검증 기록", meta: "경력·수익 약속 대신 AI 업무 개선 실습의 산출물을 정리합니다. 설계·실습·운영 사례 구분, 시험표, 실패 기록과 인수인계 기준을 제안합니다." },
+  { slug: "cases-016", expectedTitle: "AI 전환 1년 후 — 실제로 무엇이 달라졌는가", title: "AI 도입 후 정기 평가 — 효과·비용·실패를 함께 기록하기", meta: "가상 1년 성과를 삭제하고 정기 평가 가이드로 수정했습니다. 비교 기준선, 업무량 변화, 오류·비용과 유지·수정·중단 결정을 구분합니다." },
+] : operationsClaims ? [
   { slug: "cases-001", expectedTitle: "제조업 AI 도입 사례 — 소규모 제조사의 실전 경험", title: "소규모 제조기업의 첫 AI 과제 — 시험 준비와 우선순위 점검", meta: "가상 제조 성과 대신 첫 AI 과제의 준비 조건을 정리했습니다. 문제·자료·판정자·안전한 시험·복구 절차를 확인하고 AI가 아닌 대안도 비교합니다." },
   { slug: "cases-002", expectedTitle: "소매업·유통 AI 활용 사례 — 재고·발주 자동화 실전", title: "유통업 AI 판매량 예측 검증 — 자동 발주 전에 비교할 것", meta: "가상 재고·매출 개선 대신 판매량 예측 검증 방법을 설명합니다. 미래 정보 분리, 기준 예측 비교, 오차 계산과 담당자 검수 조건을 정리했습니다." },
 ] : marketingClaims ? [
@@ -57,7 +63,7 @@ async function main() {
     for (const change of changes) {
       const old = rows.find(x => x.slug === change.slug);
       assert.equal(old.title, change.expectedTitle, "Target changed or already reviewed");
-      if (!identityClaims && !educationHealth && !productivityClaims && !marketingClaims && !operationsClaims) assert.ok(old.content.includes("가상 시나리오 안내 — 2026년 9월 16일 수정"), "Expected prior review marker missing");
+      if (!identityClaims && !educationHealth && !productivityClaims && !marketingClaims && !operationsClaims && !finalCases) assert.ok(old.content.includes("가상 시나리오 안내 — 2026년 9월 16일 수정"), "Expected prior review marker missing");
     }
     const backup = join(mkdtempSync(join(tmpdir(), "blog-case-review-")), "originals.json");
     writeFileSync(backup, JSON.stringify(rows, null, 2), { mode: 0o600 });
