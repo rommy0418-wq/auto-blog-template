@@ -31,9 +31,10 @@ const CAT_ORDER = ["foundation", "tools", "marketing", "transform", "business", 
 
 export default async function ContentsPage() {
   const { rows } = await pool.query(
-    "SELECT slug FROM posts WHERE status = 'published'"
+    "SELECT slug, title FROM posts WHERE status = 'published'"
   );
   const publishedSlugs = new Set(rows.map((r) => r.slug as string));
+  const publishedTitles = new Map<string, string>(rows.map((r) => [r.slug, r.title]));
 
   const totalCount = allTopics.length;
   const publishedCount = allTopics.filter((t) => publishedSlugs.has(t.slug)).length;
@@ -47,7 +48,10 @@ export default async function ContentsPage() {
     for (const cat of CAT_ORDER) grouped[level][cat] = [];
   }
   for (const topic of allTopics) {
-    grouped[topic.level][topic.category].push(topic);
+    grouped[topic.level][topic.category].push({
+      ...topic,
+      title: publishedTitles.get(topic.slug) ?? topic.title,
+    });
   }
 
   const levelCounts: Record<string, { total: number; published: number }> = {};

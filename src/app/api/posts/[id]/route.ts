@@ -82,6 +82,7 @@ export async function PATCH(
       revalidatePath(`/posts/${rows[0].slug}`);
     }
     revalidatePath("/");
+    revalidatePath("/contents");
 
     return NextResponse.json({ success: true });
   } catch (error) {
@@ -112,6 +113,7 @@ export async function DELETE(
       revalidatePath(`/posts/${rows[0].slug}`);
     }
     revalidatePath("/");
+    revalidatePath("/contents");
 
     return NextResponse.json({ success: true });
   } catch (error) {

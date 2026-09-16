@@ -6,15 +6,20 @@ import dotenv from "dotenv";
 import { Pool } from "pg";
 dotenv.config({ path: ".env.local", quiet: true });
 
-const changes = [
+const identityClaims = process.argv.includes("--identity-claims");
+const changes = (identityClaims ? [
+  { slug: "cases-013", expectedTitle: "30여년 에이전시 대표가 본 AI 전환의 본질 — 현장 인사이트", title: "AI 전환의 업무 설계 — 책임자·승인·예외 처리 정하기", meta: "개인의 현장 경험이 아닌 AI 업무 설계 가이드. 제안서 초안 예시로 입력 책임자, 검수와 승인, 예외 처리, 확대 여부를 판단할 기록을 정리합니다." },
+  { slug: "cases-014", expectedTitle: "AI 시대 M&A·투자 전략 — AI 역량 기업 가치 평가법", title: "AI 기업 검토 시 요청할 기술 자료 — 주장과 증거를 구분하는 법", meta: "실제 인수 자문 사례가 아닌 기술 검토 자료 요청 가이드. 자체 개발 범위, 성능 시험, 외부 의존성, 미확인 사항을 기록하며 투자 판단과 구분합니다." },
+  { slug: "cases-015", expectedTitle: "AI 컨설턴트의 실제 AI 스택 공개 — 도구와 워크플로우 전체", title: "문서 요약 AI 워크플로우 설계 — 구성요소·권한·실패 시험", meta: "실제 사용 도구 공개가 아닌 문서 요약 자동화 설계안. 입력·추출·초안·검수 역할, 최소 권한, 중복 요청과 오류 처리 시험을 안내합니다." },
+] : [
   { slug: "cases-017", expectedTitle: "[가상 시나리오] 직원 10명 제조기업의 AI 첫 도입 설계", title: "소규모 제조기업의 AI 외관 검사 — 구매 전 시험 설계", meta: "가상 성과 수치 대신 외관 검사 AI의 시험 방법을 정리했습니다. 자료 분리, 불량 누락·과검출 측정, 촬영 조건 기록과 구매 전 확인할 결과물을 제안합니다." },
   { slug: "cases-018", expectedTitle: "[가상 시나리오] 고객센터 AI 도입과 상담 품질 검토", title: "고객센터 AI 도입 전 검수 — 답변 근거와 상담원 이관 시험", meta: "실제 성과 사례가 아닌 고객 응대 AI 시험 가이드. 승인 문서 구성, 상담원 검토용 지시문, 실패 질문, 근거 확인과 이관·중단 기준을 제공합니다." },
-].map(change => ({ ...change, content: readFileSync(`scripts/editorial/${change.slug}-revised.html`, "utf8").trim() }));
+]).map(change => ({ ...change, content: readFileSync(`scripts/editorial/${change.slug}-revised.html`, "utf8").trim() }));
 
 async function main() {
   for (const change of changes) {
     assert.ok(change.content.includes("편집 정정"));
-    assert.ok(change.content.includes("https://") && change.content.includes("nist.gov"));
+    assert.ok(change.content.includes("https://") && /nist.gov|genai.owasp.org/.test(change.content));
     assert.ok(change.content.length > 2000);
     assert.ok(!/<script|<iframe|onerror=/i.test(change.content));
     assert.ok(!/75% 감소|50% 증가|약 98%|투자 이상의 효과/.test(change.content));
@@ -34,7 +39,7 @@ async function main() {
     for (const change of changes) {
       const old = rows.find(x => x.slug === change.slug);
       assert.equal(old.title, change.expectedTitle, "Target changed or already reviewed");
-      assert.ok(old.content.includes("가상 시나리오 안내 — 2026년 9월 16일 수정"), "Expected prior review marker missing");
+      if (!identityClaims) assert.ok(old.content.includes("가상 시나리오 안내 — 2026년 9월 16일 수정"), "Expected prior review marker missing");
     }
     const backup = join(mkdtempSync(join(tmpdir(), "blog-case-review-")), "originals.json");
     writeFileSync(backup, JSON.stringify(rows, null, 2), { mode: 0o600 });
