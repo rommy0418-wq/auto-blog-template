@@ -9,8 +9,12 @@ dotenv.config({ path: ".env.local", quiet: true });
 const identityClaims = process.argv.includes("--identity-claims");
 const educationHealth = process.argv.includes("--education-health");
 const productivityClaims = process.argv.includes("--productivity-claims");
-assert.ok([identityClaims, educationHealth, productivityClaims].filter(Boolean).length <= 1, "Select only one review batch");
-const changes = (productivityClaims ? [
+const marketingClaims = process.argv.includes("--marketing-claims");
+assert.ok([identityClaims, educationHealth, productivityClaims, marketingClaims].filter(Boolean).length <= 1, "Select only one review batch");
+const changes = (marketingClaims ? [
+  { slug: "cases-003", expectedTitle: "음식점·프랜차이즈 AI 도입 — 메뉴 기획·마케팅 자동화", title: "음식점 AI 리뷰 분석 — 고객 의견을 확인 질문으로 바꾸기", meta: "출처 없는 외식업 통계와 성공담을 삭제하고 리뷰 분류 시험으로 수정했습니다. 복합 의견, 모호한 표현, 빈도의 분모와 직원 확인 질문을 정리합니다." },
+  { slug: "cases-005", expectedTitle: "광고·마케팅 에이전시의 AI 전환 실전 사례", title: "AI 광고 문안 검수와 실험 — 제작 효율과 광고 성과 구분하기", meta: "가상 광고 성과 대신 문안 사실 검수와 승인된 비교 실험을 구분합니다. 입력 기준표, 실패 문안, 추적 조건과 고객 보고서 작성 항목을 제공합니다." },
+] : productivityClaims ? [
   { slug: "cases-007", expectedTitle: "쇼핑몰·이커머스 AI 자동화 사례 — 운영비 절반으로 줄인 법", title: "쇼핑몰 AI 상품 설명 시험 — 검수·재작업까지 비용 비교하기", meta: "운영비 절감 약속 대신 상품 설명 초안의 시험 방법을 정리했습니다. 규격 검수, 총투입시간, 현금 지출과 실패 건수를 구분해 비교합니다." },
   { slug: "cases-008", expectedTitle: "IT·개발 회사가 AI 도입으로 생산성 3배 높인 사례", title: "AI 보조 개발의 생산성 측정 — 생성 속도보다 완료 기준", meta: "가상 개발 성과 대신 AI 보조 개발의 비교 시험을 설계합니다. 요구사항, 중복 요청 테스트, 검토·재작업 시간과 결함을 함께 기록하는 방법입니다." },
   { slug: "cases-009", expectedTitle: "컨설팅·서비스업 AI 도입 사례 — 1인이 10명 몫 하는 법", title: "서비스업 AI 보고서 검수 — 사실·해석·제안과 출처 구분하기", meta: "인력 대체 약속 대신 보고서의 근거 관리 절차를 정리했습니다. 주장별 출처 장부, 미확인 정보 처리, 검수와 납품 완료 기준을 제안합니다." },
@@ -29,7 +33,7 @@ const changes = (productivityClaims ? [
 async function main() {
   for (const change of changes) {
     assert.ok(change.content.includes("편집 정정"));
-    assert.ok(change.content.includes("https://") && /nist.gov|genai.owasp.org|who.int|unesco.org|docs.github.com/.test(change.content));
+    assert.ok(change.content.includes("https://") && /nist.gov|genai.owasp.org|who.int|unesco.org|docs.github.com|support.google.com/.test(change.content));
     assert.ok(change.content.length > 2000);
     assert.ok(!/<script|<iframe|onerror=/i.test(change.content));
     assert.ok(!/75% 감소|50% 증가|약 98%|투자 이상의 효과/.test(change.content));
@@ -49,7 +53,7 @@ async function main() {
     for (const change of changes) {
       const old = rows.find(x => x.slug === change.slug);
       assert.equal(old.title, change.expectedTitle, "Target changed or already reviewed");
-      if (!identityClaims && !educationHealth && !productivityClaims) assert.ok(old.content.includes("가상 시나리오 안내 — 2026년 9월 16일 수정"), "Expected prior review marker missing");
+      if (!identityClaims && !educationHealth && !productivityClaims && !marketingClaims) assert.ok(old.content.includes("가상 시나리오 안내 — 2026년 9월 16일 수정"), "Expected prior review marker missing");
     }
     const backup = join(mkdtempSync(join(tmpdir(), "blog-case-review-")), "originals.json");
     writeFileSync(backup, JSON.stringify(rows, null, 2), { mode: 0o600 });
