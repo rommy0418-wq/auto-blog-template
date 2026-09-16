@@ -4,7 +4,7 @@ import pool from "@/lib/db";
 import { verifyAdminKey } from "@/lib/seo";
 
 export async function GET(
-  _request: NextRequest,
+  request: NextRequest,
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
@@ -14,16 +14,26 @@ export async function GET(
       return NextResponse.json({ error: "Invalid id" }, { status: 400 });
     }
 
-    const { rows } = await pool.query("SELECT * FROM posts WHERE id = $1", [postId]);
+    const isAdmin = verifyAdminKey(request);
+    const { rows } = await pool.query(
+      isAdmin
+        ? "SELECT * FROM posts WHERE id = $1"
+        : "SELECT * FROM posts WHERE id = $1 AND status = 'published'",
+      [postId]
+    );
     const post = rows[0];
 
     if (!post) {
       return NextResponse.json({ error: "Not found" }, { status: 404 });
     }
 
-    await pool.query("UPDATE posts SET view_count = view_count + 1 WHERE id = $1", [postId]);
+    if (!isAdmin) {
+      await pool.query("UPDATE posts SET view_count = view_count + 1 WHERE id = $1", [postId]);
+    }
 
-    return NextResponse.json(post);
+    return NextResponse.json(post, {
+      headers: { "Cache-Control": "private, no-store" },
+    });
   } catch (error) {
     console.error("GET /api/posts/[id] error:", error);
     return NextResponse.json({ error: "Internal server error" }, { status: 500 });

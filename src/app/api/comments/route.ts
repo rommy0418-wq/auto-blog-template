@@ -18,6 +18,7 @@ export async function GET(request: NextRequest) {
       `SELECT id, post_id, nickname, content, created_at
        FROM comments
        WHERE post_id = $1 AND is_approved = TRUE
+         AND EXISTS (SELECT 1 FROM posts WHERE posts.id = comments.post_id AND posts.status = 'published')
        ORDER BY created_at ASC`,
       [postId]
     );
@@ -77,7 +78,7 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: "content too long" }, { status: 400 });
     }
 
-    const { rows: postRows } = await pool.query("SELECT id FROM posts WHERE id = $1", [postId]);
+    const { rows: postRows } = await pool.query("SELECT id FROM posts WHERE id = $1 AND status = 'published'", [postId]);
     if (!postRows[0]) {
       return NextResponse.json({ error: "Post not found" }, { status: 404 });
     }

@@ -15,7 +15,7 @@ export async function POST(
       return NextResponse.json({ error: "Invalid id" }, { status: 400 });
     }
 
-    const { rows: postRows } = await pool.query("SELECT id FROM posts WHERE id = $1", [postId]);
+    const { rows: postRows } = await pool.query("SELECT id FROM posts WHERE id = $1 AND status = 'published'", [postId]);
     if (!postRows[0]) {
       return NextResponse.json({ error: "Post not found" }, { status: 404 });
     }

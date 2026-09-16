@@ -1,8 +1,9 @@
 /**
  * 기존 글 품질 업그레이드 스크립트
  * 조회수 낮은 순으로 N개씩 재생성 (content + meta_description 업데이트)
- * 사용법: npx tsx scripts/upgrade-posts.ts          (기본 5개)
- *         npx tsx scripts/upgrade-posts.ts 10       (10개)
+ * 검수 기간에는 기본 실행이 중지됩니다.
+ * 직접 공개 글 덮어쓰기를 승인한 경우에만:
+ * npx tsx scripts/upgrade-posts.ts 5 --allow-public-overwrite
  */
 
 import { GoogleGenerativeAI } from "@google/generative-ai";
@@ -12,6 +13,12 @@ import * as dotenv from "dotenv";
 import * as path from "path";
 import * as fs from "fs";
 import { EDITORIAL_RULES } from "./editorial-rules";
+
+// Keep scheduled legacy workflows harmless without changing their permissions.
+if (!process.argv.includes("--allow-public-overwrite")) {
+  console.log("검수 기간: 공개 글 자동 재작성을 중지했습니다. 기존 글은 변경하지 않습니다.");
+  process.exit(0);
+}
 
 dotenv.config({ path: path.resolve(process.cwd(), ".env.local") });
 

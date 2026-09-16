@@ -75,7 +75,7 @@ interface UnsplashResult {
 // ── DB에서 이미 사용된 이미지 URL 조회 (썸네일 + 본문 인라인 모두) ──
 async function getUsedImageIds(): Promise<Set<string>> {
   const { rows } = await pool.query(
-    "SELECT thumbnail_url, content FROM posts WHERE status = 'published'"
+    "SELECT thumbnail_url, content FROM posts"
   );
   const ids = new Set<string>();
   const inlineRegex = /src="(https:\/\/images\.unsplash\.com\/[^"?]+)/g;
@@ -388,7 +388,7 @@ async function savePost(topic: Topic, content: string, thumbnailUrl: string | nu
   const result = await pool.query(
     `INSERT INTO posts
       (title, content, slug, category, level, thumbnail_url, meta_description, keywords, status, published_at)
-     VALUES ($1, $2, $3, $4, $5, $6, $7, $8, 'published', NOW())
+     VALUES ($1, $2, $3, $4, $5, $6, $7, $8, 'draft', NULL)
      RETURNING id`,
     [
       topic.title,
@@ -422,7 +422,7 @@ async function main() {
     const topic = await getNextTopic();
 
     if (!topic) {
-      writeLog(`✅ 모든 주제(${totalTopics}개)가 발행 완료됐습니다!`);
+      writeLog(`✅ 모든 주제(${totalTopics}개)가 생성 완료됐습니다. 미공개 초안은 별도 검수가 필요합니다.`);
       await pool.end();
       return;
     }
@@ -449,8 +449,8 @@ async function main() {
 
     // DB 저장
     const postId = await savePost(topic, contentWithImages, thumbnail?.url ?? null, metaDesc);
-    writeLog(`💾 DB 저장 완료 (id: ${postId}, slug: ${topic.slug})`);
-    writeLog(`🌐 URL: ${process.env.NEXT_PUBLIC_SITE_URL}/posts/${topic.slug}`);
+    writeLog(`💾 비공개 초안 저장 완료 (id: ${postId}, slug: ${topic.slug})`);
+    writeLog("🔎 자동 공개하지 않습니다. 사실 확인·출처·실용성 검수 후 별도로 발행하세요.");
     writeLog("=== 완료 ===\n");
 
   } catch (error) {
