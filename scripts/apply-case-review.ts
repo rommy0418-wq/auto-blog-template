@@ -7,7 +7,12 @@ import { Pool } from "pg";
 dotenv.config({ path: ".env.local", quiet: true });
 
 const identityClaims = process.argv.includes("--identity-claims");
-const changes = (identityClaims ? [
+const educationHealth = process.argv.includes("--education-health");
+assert.ok(!(identityClaims && educationHealth), "Select only one review batch");
+const changes = (educationHealth ? [
+  { slug: "cases-004", expectedTitle: "병원·의원 AI 활용 — 예약·차트·마케팅 자동화 사례", title: "의료기관 AI 첫 시험 — 환자정보 없는 공개 안내문 검수", meta: "가상 병원 성과 대신 공개 행정 안내문 초안을 시험하는 방법을 정리했습니다. 환자정보·임상 판단을 제외하고 문서 승인, 실패 질문, 담당자 검수를 구분합니다." },
+  { slug: "cases-006", expectedTitle: "교육 서비스 AI 전환 — 학원·코칭 비즈니스 사례", title: "교육용 AI 자료 검수 — 정답·풀이·학습 효과를 구분하는 법", meta: "확인되지 않은 교육 서비스 성과 수치를 삭제하고 교사용 검수 절차로 개편했습니다. 분수 문제 예시, 오류 판정, 배포 승인과 학습 효과 측정의 한계를 설명합니다." },
+] : identityClaims ? [
   { slug: "cases-013", expectedTitle: "30여년 에이전시 대표가 본 AI 전환의 본질 — 현장 인사이트", title: "AI 전환의 업무 설계 — 책임자·승인·예외 처리 정하기", meta: "개인의 현장 경험이 아닌 AI 업무 설계 가이드. 제안서 초안 예시로 입력 책임자, 검수와 승인, 예외 처리, 확대 여부를 판단할 기록을 정리합니다." },
   { slug: "cases-014", expectedTitle: "AI 시대 M&A·투자 전략 — AI 역량 기업 가치 평가법", title: "AI 기업 검토 시 요청할 기술 자료 — 주장과 증거를 구분하는 법", meta: "실제 인수 자문 사례가 아닌 기술 검토 자료 요청 가이드. 자체 개발 범위, 성능 시험, 외부 의존성, 미확인 사항을 기록하며 투자 판단과 구분합니다." },
   { slug: "cases-015", expectedTitle: "AI 컨설턴트의 실제 AI 스택 공개 — 도구와 워크플로우 전체", title: "문서 요약 AI 워크플로우 설계 — 구성요소·권한·실패 시험", meta: "실제 사용 도구 공개가 아닌 문서 요약 자동화 설계안. 입력·추출·초안·검수 역할, 최소 권한, 중복 요청과 오류 처리 시험을 안내합니다." },
@@ -19,7 +24,7 @@ const changes = (identityClaims ? [
 async function main() {
   for (const change of changes) {
     assert.ok(change.content.includes("편집 정정"));
-    assert.ok(change.content.includes("https://") && /nist.gov|genai.owasp.org/.test(change.content));
+    assert.ok(change.content.includes("https://") && /nist.gov|genai.owasp.org|who.int|unesco.org/.test(change.content));
     assert.ok(change.content.length > 2000);
     assert.ok(!/<script|<iframe|onerror=/i.test(change.content));
     assert.ok(!/75% 감소|50% 증가|약 98%|투자 이상의 효과/.test(change.content));
@@ -39,7 +44,7 @@ async function main() {
     for (const change of changes) {
       const old = rows.find(x => x.slug === change.slug);
       assert.equal(old.title, change.expectedTitle, "Target changed or already reviewed");
-      if (!identityClaims) assert.ok(old.content.includes("가상 시나리오 안내 — 2026년 9월 16일 수정"), "Expected prior review marker missing");
+      if (!identityClaims && !educationHealth) assert.ok(old.content.includes("가상 시나리오 안내 — 2026년 9월 16일 수정"), "Expected prior review marker missing");
     }
     const backup = join(mkdtempSync(join(tmpdir(), "blog-case-review-")), "originals.json");
     writeFileSync(backup, JSON.stringify(rows, null, 2), { mode: 0o600 });
