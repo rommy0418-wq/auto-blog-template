@@ -163,6 +163,12 @@ export default async function HomePage({ searchParams }: { searchParams: SearchP
       {/* ── 메인 콘텐츠 ───────────────────────────── */}
       <main style={{ maxWidth: "56rem", margin: "0 auto", padding: "0 1.5rem" }}>
 
+        <section style={{ padding: "1.25rem", marginTop: "1.5rem", background: "var(--bg-card)", border: "1px solid var(--border)", borderRadius: "10px" }}>
+          <h2 style={{ fontSize: "1.125rem", marginBottom: "0.5rem" }}>AI 도입, 업무 한 가지부터 시험해 보세요</h2>
+          <p style={{ color: "var(--ink-mid)", lineHeight: 1.8 }}>업무 선정 질문, 입력·출력 예시, 오류 검토 기준과 시간 기록표를 한곳에 모았습니다. 실제 성과 사례가 아닌 직접 채워 쓰는 실무 양식입니다.</p>
+          <Link href="/ai-pilot" className="btn btn-md btn-outline">시험 운영표와 CSV 양식 보기 →</Link>
+        </section>
+
         {/* 뷰 토글 + 글 수 */}
         <div style={{
           display: "flex",

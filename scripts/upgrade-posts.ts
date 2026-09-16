@@ -11,6 +11,7 @@ import { allTopics, Topic } from "./topics";
 import * as dotenv from "dotenv";
 import * as path from "path";
 import * as fs from "fs";
+import { EDITORIAL_RULES } from "./editorial-rules";
 
 dotenv.config({ path: path.resolve(process.cwd(), ".env.local") });
 
@@ -80,7 +81,7 @@ function buildPrompt(topic: Topic): string {
   const structure = STRUCTURE_TEMPLATES[Math.floor(Math.random() * STRUCTURE_TEMPLATES.length)];
 
   return `당신은 "${siteName}" 블로그의 전문 작가입니다.
-30여년 경력의 웹·IT 전문가 시점에서, 기업의 AI 전환을 돕는 실용적인 글을 작성합니다.
+기업과 1인 사업자의 업무를 돕는 정보성 초안을 작성합니다. 운영자의 경험을 대신 말하지 마세요.
 작성 기준일은 ${currentDate}입니다.
 
 아래 주제로 블로그 글을 작성해주세요.
@@ -115,6 +116,8 @@ function buildPrompt(topic: Topic): string {
 ${catInstruction}
 
 ${structure.instruction}
+
+${EDITORIAL_RULES}
 
 [출력 형식]
 - 순수 HTML만 출력 (마크다운 기호 절대 사용 금지)
