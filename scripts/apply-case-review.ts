@@ -8,8 +8,13 @@ dotenv.config({ path: ".env.local", quiet: true });
 
 const identityClaims = process.argv.includes("--identity-claims");
 const educationHealth = process.argv.includes("--education-health");
-assert.ok(!(identityClaims && educationHealth), "Select only one review batch");
-const changes = (educationHealth ? [
+const productivityClaims = process.argv.includes("--productivity-claims");
+assert.ok([identityClaims, educationHealth, productivityClaims].filter(Boolean).length <= 1, "Select only one review batch");
+const changes = (productivityClaims ? [
+  { slug: "cases-007", expectedTitle: "쇼핑몰·이커머스 AI 자동화 사례 — 운영비 절반으로 줄인 법", title: "쇼핑몰 AI 상품 설명 시험 — 검수·재작업까지 비용 비교하기", meta: "운영비 절감 약속 대신 상품 설명 초안의 시험 방법을 정리했습니다. 규격 검수, 총투입시간, 현금 지출과 실패 건수를 구분해 비교합니다." },
+  { slug: "cases-008", expectedTitle: "IT·개발 회사가 AI 도입으로 생산성 3배 높인 사례", title: "AI 보조 개발의 생산성 측정 — 생성 속도보다 완료 기준", meta: "가상 개발 성과 대신 AI 보조 개발의 비교 시험을 설계합니다. 요구사항, 중복 요청 테스트, 검토·재작업 시간과 결함을 함께 기록하는 방법입니다." },
+  { slug: "cases-009", expectedTitle: "컨설팅·서비스업 AI 도입 사례 — 1인이 10명 몫 하는 법", title: "서비스업 AI 보고서 검수 — 사실·해석·제안과 출처 구분하기", meta: "인력 대체 약속 대신 보고서의 근거 관리 절차를 정리했습니다. 주장별 출처 장부, 미확인 정보 처리, 검수와 납품 완료 기준을 제안합니다." },
+] : educationHealth ? [
   { slug: "cases-004", expectedTitle: "병원·의원 AI 활용 — 예약·차트·마케팅 자동화 사례", title: "의료기관 AI 첫 시험 — 환자정보 없는 공개 안내문 검수", meta: "가상 병원 성과 대신 공개 행정 안내문 초안을 시험하는 방법을 정리했습니다. 환자정보·임상 판단을 제외하고 문서 승인, 실패 질문, 담당자 검수를 구분합니다." },
   { slug: "cases-006", expectedTitle: "교육 서비스 AI 전환 — 학원·코칭 비즈니스 사례", title: "교육용 AI 자료 검수 — 정답·풀이·학습 효과를 구분하는 법", meta: "확인되지 않은 교육 서비스 성과 수치를 삭제하고 교사용 검수 절차로 개편했습니다. 분수 문제 예시, 오류 판정, 배포 승인과 학습 효과 측정의 한계를 설명합니다." },
 ] : identityClaims ? [
@@ -24,7 +29,7 @@ const changes = (educationHealth ? [
 async function main() {
   for (const change of changes) {
     assert.ok(change.content.includes("편집 정정"));
-    assert.ok(change.content.includes("https://") && /nist.gov|genai.owasp.org|who.int|unesco.org/.test(change.content));
+    assert.ok(change.content.includes("https://") && /nist.gov|genai.owasp.org|who.int|unesco.org|docs.github.com/.test(change.content));
     assert.ok(change.content.length > 2000);
     assert.ok(!/<script|<iframe|onerror=/i.test(change.content));
     assert.ok(!/75% 감소|50% 증가|약 98%|투자 이상의 효과/.test(change.content));
@@ -44,7 +49,7 @@ async function main() {
     for (const change of changes) {
       const old = rows.find(x => x.slug === change.slug);
       assert.equal(old.title, change.expectedTitle, "Target changed or already reviewed");
-      if (!identityClaims && !educationHealth) assert.ok(old.content.includes("가상 시나리오 안내 — 2026년 9월 16일 수정"), "Expected prior review marker missing");
+      if (!identityClaims && !educationHealth && !productivityClaims) assert.ok(old.content.includes("가상 시나리오 안내 — 2026년 9월 16일 수정"), "Expected prior review marker missing");
     }
     const backup = join(mkdtempSync(join(tmpdir(), "blog-case-review-")), "originals.json");
     writeFileSync(backup, JSON.stringify(rows, null, 2), { mode: 0o600 });
