@@ -19,6 +19,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   }));
 
   const staticPages: MetadataRoute.Sitemap = [
+    { url: `${siteUrl}/labs/customer-support`, lastModified: new Date("2026-10-02T00:00:00+09:00") },
     { url: `${siteUrl}/resources`, lastModified: new Date("2026-10-02T00:00:00+09:00") },
     { url: `${siteUrl}/labs/meeting-notes`, lastModified: new Date("2026-10-02T00:00:00+09:00") },
     { url: `${siteUrl}/ai-pilot`, lastModified: new Date("2026-09-16T00:00:00+09:00") },

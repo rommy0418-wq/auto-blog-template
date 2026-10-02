@@ -170,7 +170,7 @@ export default async function HomePage({ searchParams }: { searchParams: SearchP
 
         <section style={{ padding: "1.25rem", marginTop: "1.5rem", background: "var(--bg-card)", border: "1px solid var(--border)", borderRadius: "10px" }}>
           <h2 style={{ fontSize: "1.125rem", marginBottom: "0.5rem" }}>AI 실무 자료실 — 직접 실행하고 결과를 확인하세요</h2>
-          <p style={{ color: "var(--ink-mid)", lineHeight: 1.8 }}>가상 회의 메모 5종의 실제 AI 응답과 검토 기준을 공개합니다. 처음 시작하는 분을 위한 업무 선정표와 다운로드 자료도 함께 제공합니다.</p>
+          <p style={{ color: "var(--ink-mid)", lineHeight: 1.8 }}>회의록과 고객 문의 답변 실습의 실제 AI 응답과 검토 기준을 공개합니다. 처음 시작하는 분을 위한 업무 선정표와 다운로드 자료도 함께 제공합니다.</p>
           <Link href="/resources" className="btn btn-md btn-outline">시작하기 · 직접 해보기 · 자료 다운로드 →</Link>
         </section>
 
