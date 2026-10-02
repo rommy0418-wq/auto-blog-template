@@ -40,6 +40,7 @@ export default function Footer() {
         {/* 우측: 링크 */}
         <nav style={{ display: "flex", alignItems: "center", gap: "0.25rem", flexWrap: "wrap" }}>
           {[
+            { href: "/resources", label: "AI 실무 자료실" },
             { href: "/ai-pilot", label: "AI 시험 운영표" },
             { href: "/about", label: "블로그 소개" },
             { href: "/contact", label: "문의하기" },

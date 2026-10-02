@@ -169,9 +169,9 @@ export default async function HomePage({ searchParams }: { searchParams: SearchP
       <main style={{ maxWidth: "56rem", margin: "0 auto", padding: "0 1.5rem" }}>
 
         <section style={{ padding: "1.25rem", marginTop: "1.5rem", background: "var(--bg-card)", border: "1px solid var(--border)", borderRadius: "10px" }}>
-          <h2 style={{ fontSize: "1.125rem", marginBottom: "0.5rem" }}>AI 도입, 업무 한 가지부터 시험해 보세요</h2>
-          <p style={{ color: "var(--ink-mid)", lineHeight: 1.8 }}>업무 선정 질문, 입력·출력 예시, 오류 검토 기준과 시간 기록표를 한곳에 모았습니다. 실제 성과 사례가 아닌 직접 채워 쓰는 실무 양식입니다.</p>
-          <Link href="/ai-pilot" className="btn btn-md btn-outline">시험 운영표와 CSV 양식 보기 →</Link>
+          <h2 style={{ fontSize: "1.125rem", marginBottom: "0.5rem" }}>AI 실무 자료실 — 직접 실행하고 결과를 확인하세요</h2>
+          <p style={{ color: "var(--ink-mid)", lineHeight: 1.8 }}>가상 회의 메모 5종의 실제 AI 응답과 검토 기준을 공개합니다. 처음 시작하는 분을 위한 업무 선정표와 다운로드 자료도 함께 제공합니다.</p>
+          <Link href="/resources" className="btn btn-md btn-outline">시작하기 · 직접 해보기 · 자료 다운로드 →</Link>
         </section>
 
         {/* 뷰 토글 + 글 수 */}

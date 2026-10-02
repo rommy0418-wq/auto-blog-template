@@ -1,6 +1,8 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
+  // Keep build-time Postgres connections bounded on the small database plan.
+  experimental: { cpus: 2, staticGenerationMaxConcurrency: 2 },
   // Resolve existence/canonical metadata before the response headers are sent.
   htmlLimitedBots: /.*/,
   async redirects() {
